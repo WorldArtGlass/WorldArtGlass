@@ -838,8 +838,8 @@ export default function WorldArtGlassPage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
 
-            {/* Left Column: Concise Brand & Craftsmanship Highlights */}
-            <div className="lg:col-span-7">
+            {/* Left Column on Desktop (Below Video on Mobile): Concise Brand & Craftsmanship Highlights */}
+            <div className="lg:col-span-7 order-2 lg:order-1">
               <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-sky-700 bg-sky-100/90 border border-sky-200/80 px-3.5 py-1 rounded-full mb-3.5">
                 <Sparkles className="w-3.5 h-3.5 text-sky-600" />
                 Real Craft. Real Results.
@@ -893,8 +893,8 @@ export default function WorldArtGlassPage() {
               </div>
             </div>
 
-            {/* Right Column: Compact Portrait Project Showcase Video */}
-            <div className="lg:col-span-5 flex justify-center">
+            {/* Right Column on Desktop (On Top on Mobile): Compact Portrait Project Showcase Video */}
+            <div className="lg:col-span-5 order-1 lg:order-2 flex justify-center">
               <div className="relative w-full max-w-[260px] sm:max-w-[290px] h-[400px] sm:h-[450px] rounded-3xl overflow-hidden shadow-xl shadow-slate-900/15 border-4 border-slate-900/10 bg-slate-950 group">
                 <video
                   src="/videos/luxury_office_curved_glass_showcase.mp4"
