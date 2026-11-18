@@ -833,6 +833,91 @@ export default function WorldArtGlassPage() {
         </div>
       </section>
 
+      {/* Featured Video Walkthrough Showcase (Left: Texts | Right: Video) */}
+      <section className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 bg-white border-y border-slate-200">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+
+            {/* Left Column: Concise Brand & Craftsmanship Highlights */}
+            <div className="lg:col-span-7">
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-sky-700 bg-sky-100/90 border border-sky-200/80 px-3.5 py-1 rounded-full mb-3.5">
+                <Sparkles className="w-3.5 h-3.5 text-sky-600" />
+                Real Craft. Real Results.
+              </div>
+
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight mb-3">
+                Transforming Modern Workspaces Into Architectural Landmarks
+              </h2>
+
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-6 max-w-xl">
+                Watch our in-house precision in action — from digital laser measurements and luxury custom-framed glass corridors to spotless turnkey handovers across Hyderabad.
+              </p>
+
+              {/* 4 Compact Craftsmanship Highlights */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-7 max-w-xl">
+                <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 rounded-xl px-3.5 py-2.5">
+                  <Ruler className="w-4 h-4 text-sky-600 shrink-0" />
+                  <span className="text-sm font-bold text-slate-800">Free Laser Site Survey</span>
+                </div>
+                <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 rounded-xl px-3.5 py-2.5">
+                  <Award className="w-4 h-4 text-amber-600 shrink-0" />
+                  <span className="text-sm font-bold text-slate-800">25+ Years Glass Mastery</span>
+                </div>
+                <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 rounded-xl px-3.5 py-2.5">
+                  <Clock className="w-4 h-4 text-[#5ea313] shrink-0" />
+                  <span className="text-sm font-bold text-slate-800">Fast Turnkey Delivery</span>
+                </div>
+                <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 rounded-xl px-3.5 py-2.5">
+                  <ShieldCheck className="w-4 h-4 text-indigo-600 shrink-0" />
+                  <span className="text-sm font-bold text-slate-800">100% Genuine Saint-Gobain</span>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3.5">
+                <a
+                  href="https://wa.me/919985597294?text=Hi%20World%20Art%20Glass%2C%20I%20watched%20your%20site%20walkthrough%20video%20and%20would%20like%20to%20book%20a%20Free%20Site%20Visit%20for%20my%20space."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 bg-[#7dd91a] hover:bg-[#71c917] text-white font-bold text-sm px-6 py-3 rounded-full shadow-lg shadow-[#7dd91a]/30 transition transform hover:-translate-y-0.5 drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)]"
+                >
+                  <WhatsAppIcon className="w-4 h-4" /> Book Free Site Visit
+                </a>
+
+                <Link
+                  href="/projects"
+                  className="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm px-6 py-3 rounded-full shadow-md transition"
+                >
+                  <Building2 className="w-4 h-4 text-sky-400" /> Explore All Projects
+                </Link>
+              </div>
+            </div>
+
+            {/* Right Column: Compact Portrait Project Showcase Video */}
+            <div className="lg:col-span-5 flex justify-center">
+              <div className="relative w-full max-w-[260px] sm:max-w-[290px] h-[400px] sm:h-[450px] rounded-3xl overflow-hidden shadow-xl shadow-slate-900/15 border-4 border-slate-900/10 bg-slate-950 group">
+                <video
+                  src="/videos/luxury_office_curved_glass_showcase.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute top-3 left-3 z-10 pointer-events-none">
+                  <span className="inline-flex items-center gap-1.5 bg-slate-950/80 backdrop-blur-md border border-white/20 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                    <Sparkles className="w-3.5 h-3.5 text-[#7dd91a]" />
+                    Site Walkthrough
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       {/* Google Reviews Section (4.9 Stars, 188+ Reviews) - Auto Carousel in a row */}
       <section id="reviews" className="py-16 bg-slate-100/60 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
