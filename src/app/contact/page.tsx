@@ -121,7 +121,7 @@ export default function ContactPage() {
                   <div>
                     <div className="text-xs font-bold text-slate-900 uppercase tracking-wider">Showroom &amp; Office</div>
                     <div className="text-xs sm:text-sm text-slate-600 mt-1">
-                      New Aghapura X Road, Goshamahal, Hyderabad – 500001, Telangana.
+                      Aghapura Rd, Habeeb Nagar, Aghapura, Nampally, Hyderabad, Telangana 500001.
                     </div>
                   </div>
                 </div>
@@ -328,15 +328,15 @@ export default function ContactPage() {
 
           {/* Embedded Google Map */}
           <div className="mt-8 rounded-3xl overflow-hidden border border-slate-200 h-96 shadow-md">
-            <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.447547161642!2d78.468200!3d17.387900!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb9754f808db33%3A0x6b77ceb2efc8fca3!2sAghapura%20X%20Road%2C%20Goshamahal%2C%20Hyderabad%2C%20Telangana%20500001!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
-              width="100%" 
-              height="100%" 
-              style={{ border: 0 }} 
-              allowFullScreen={false} 
-              loading="lazy" 
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1903.7!2d78.4624817!3d17.3860145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb977a08053781%3A0x745dde9284eb12f9!2sWorld%20Art%20Glass%20Hyderabad!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="World Art Glass Goshamahal Hyderabad Location Map"
+              title="World Art Glass Hyderabad - Aghapura Rd, Habeeb Nagar, Nampally Location Map"
             ></iframe>
           </div>
 

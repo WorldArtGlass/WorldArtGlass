@@ -354,7 +354,7 @@ export default function WorldArtGlassPage() {
             {/* Bottom Hero Stats Row (Directly matching reference image 3!) */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-xl pt-6 border-t border-white/20">
               <div>
-                <div className="text-xl sm:text-3xl font-extrabold text-white tracking-tight">15+ YRS</div>
+                <div className="text-xl sm:text-3xl font-extrabold text-white tracking-tight">25+ YRS</div>
                 <div className="text-[10px] sm:text-xs text-blue-100 font-medium mt-0.5">In Hyderabad</div>
               </div>
               <div>
