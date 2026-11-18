@@ -390,7 +390,7 @@ export default function WorldArtGlassPage() {
                   A Premier Architectural Glass Service Provider in Telangana
                 </h2>
                 <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-6">
-                  World Art Glass operates a dedicated showroom, fabrication facility, and on-site engineering team based in Goshamahal, Hyderabad. We provide end-to-end solutions — from laser site measurements and 3D architectural layout planning to CNC edge-polishing and on-time professional installation.
+                  World Art Glass Hyderabad is a leading Glass Company, Dealer &amp; Installation Contractor with a dedicated showroom and glass fabrication unit in Goshamahal, Hyderabad. We deliver end-to-end 8mm, 10mm &amp; 12mm Saint-Gobain Toughened Glass solutions — including IT Office &amp; Black Slim Profile Glass Partitions, Telescopic &amp; Frameless Partitions, Shower Cubicles, Glass Sliding &amp; Swing Doors, Staircase &amp; Balcony Glass Railings, Spider Glass Facades, Structural Glazing, Lacquered/Fluted Glass &amp; LED Mirrors across Banjara Hills, Jubilee Hills, Hitech City, Gachibowli, Madhapur, Financial District, Nanakramguda, Secunderabad &amp; Begumpet.
                 </p>
 
                 <div className="grid grid-cols-2 gap-4 mb-8">

@@ -304,7 +304,7 @@ export default function ServicesPage() {
             </h1>
 
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-              We fabricate and install genuine Toughened Saint-Gobain Glass for commercial IT towers, luxury residential villas, storefronts, and interior architectural projects across Hyderabad.
+              We fabricate and install genuine 8mm, 10mm &amp; 12mm Saint-Gobain Toughened Glass for IT Office &amp; Black Slim Profile Glass Partitions, Telescopic &amp; Frameless Partitions, 10mm Toughened Shower Cubicles, Sliding &amp; Swing Glass Doors, Staircase &amp; Balcony Glass Railings, Spider Glass Facades, Structural Glazing, Lacquered/Fluted Glass &amp; Bathroom LED Mirrors across Hyderabad, Telangana.
             </p>
           </div>
         </div>

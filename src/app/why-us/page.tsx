@@ -21,7 +21,8 @@ import {
   Clock,
   Ruler,
   Layers,
-  Building2
+  Building2,
+  MapPin
 } from "lucide-react";
 
 export default function WhyUsPage() {
@@ -30,23 +31,23 @@ export default function WhyUsPage() {
   const faqs = [
     {
       q: "How can I verify that the glass is genuine Saint-Gobain Toughened Glass?",
-      a: "Every single glass sheet supplied and installed by World Art Glass features the permanent laser-engraved Saint-Gobain trademark and toughened glass quality certification code. We also issue official GST Tax invoices specifying the Saint-Gobain batch details."
+      a: "Every single glass sheet supplied and installed by World Art Glass Hyderabad features the permanent laser-engraved Saint-Gobain trademark and toughened glass quality certification code. As trusted Toughened Glass Dealers in Hyderabad, we also issue official GST Tax invoices specifying the Saint-Gobain batch details."
     },
     {
       q: "Do you provide free laser site measurement across Hyderabad?",
-      a: "Yes! We offer 100% free site visits anywhere in Hyderabad (including Hitec City, Gachibowli, Madhapur, Financial District, Jubilee Hills, Banjara Hills, Begumpet, Secunderabad, etc.). Our technical supervisor brings digital laser measurement tools to ensure millimetric precision."
+      a: "Yes! We offer 100% free site visits anywhere in Hyderabad, Telangana — including Banjara Hills, Jubilee Hills, Hitech City, Gachibowli, Madhapur, Financial District, Nanakramguda, Begumpet, and Secunderabad. Our technical supervisor brings digital laser measurement tools to ensure millimetric precision."
     },
     {
-      q: "What is the difference between 10mm and 12mm toughened glass?",
-      a: "10mm toughened glass is the industry standard for indoor office partitions, shower enclosures, and standard doors. For structural heights exceeding 9.5 feet, heavy-traffic commercial showroom entries, and frameless exterior balcony railings, 12mm Saint-Gobain toughened glass is recommended for maximum rigidity and safety."
+      q: "What is the difference between 8mm, 10mm and 12mm toughened glass?",
+      a: "8mm toughened glass is ideal for interior cabinet doors, decorative glass panels, and compact partitions. 10mm toughened glass is the industry standard for indoor office glass partitions, 10mm toughened glass shower cubicles, and standard doors. For structural heights exceeding 9.5 feet, heavy-traffic commercial showroom entries, spider glass facades, and frameless staircase or balcony glass railings, 12mm Saint-Gobain toughened glass is recommended for maximum rigidity and safety."
     },
     {
-      q: "How long does fabrication and installation take?",
-      a: "From the date of laser site measurement approval, custom toughening and edge polishing takes 4 to 6 working days. On-site installation is completed cleanly within 1 to 2 days by our in-house master technicians."
+      q: "How long does glass fabrication and installation take?",
+      a: "From the date of laser site measurement approval, custom glass fabrication, toughening, and CNC edge polishing takes 4 to 6 working days. On-site toughened glass installation and glass fitting work is completed cleanly within 1 to 2 days by our in-house master technicians."
     },
     {
       q: "What hardware and fitting brands do you install?",
-      a: "We exclusively use heavy-duty architectural grade stainless steel (SS 304 / 316) and heavy-gauge aluminium profiles from Dorma, Ozone, Geze, and certified hardware manufacturers with anti-rust warranties."
+      a: "We exclusively use heavy-duty architectural grade stainless steel (SS 304 / 316), spider glass fittings, and slim profile aluminium frames from Dorma, Ozone, Geze, and certified hardware manufacturers with anti-rust warranties."
     }
   ];
 
@@ -86,7 +87,7 @@ export default function WhyUsPage() {
             </h1>
 
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-              We stand apart from local unorganized vendors through verified Saint-Gobain glass authenticity, digital laser measurement, certified Dorma/Ozone hardware, and official GST tax compliance.
+              As a leading Glass Company in Hyderabad and among the Best Glass Contractors in Hyderabad, World Art Glass Hyderabad delivers certified 8mm, 10mm &amp; 12mm Saint-Gobain Toughened Glass, IT Office &amp; Black Slim Profile Glass Partitions, Shower Cubicles, Glass Railings, Spider Glass Facades, and Structural Glazing with digital laser measurement and official GST compliance.
             </p>
           </div>
         </div>
@@ -367,12 +368,105 @@ export default function WhyUsPage() {
                   <ChevronDown className={`w-4 h-4 text-slate-400 transition transform ${openFaq === index ? "rotate-180 text-sky-600" : ""}`} />
                 </button>
                 {openFaq === index && (
-                  <div className="px-5 pb-5 pt-1 text-xs text-slate-600 leading-relaxed border-t border-slate-100">
+                  <div className="px-5 pb-5 pt-2 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
                     {faq.a}
                   </div>
                 )}
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* About World Art Glass: Complete Architectural Glass Capabilities & Service Areas (SEO-Rich Section) */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white border-t border-slate-200">
+        <div className="max-w-7xl mx-auto">
+          <div className="max-w-4xl mx-auto text-center mb-12">
+            <span className="text-xs uppercase tracking-wider font-bold text-sky-600 bg-sky-100 px-3 py-1 rounded-full mb-3 inline-block">
+              About Our Glass Expertise
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-4">
+              Complete Architectural Glass Solutions in Hyderabad, Telangana
+            </h2>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+              Recognized as the Best Glass Company in Hyderabad and trusted Glass Dealers, Glass Supplier, Glass Manufacturer, and Commercial Glass Contractors, <strong className="text-slate-900">World Art Glass Hyderabad</strong> specializes in end-to-end Glass Fabrication, Glass Fitting Work, Commercial Glass Work, Residential Glass Work, and Architectural Glass Work across Hyderabad Telangana.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+            {/* Category 1 */}
+            <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-6">
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                <Building2 className="w-5 h-5 text-sky-600 shrink-0" />
+                Toughened Glass &amp; Office Partitions
+              </h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Authorized Toughened Glass Dealers Hyderabad offering <strong>Saint-Gobain Toughened Glass</strong> in <strong>8mm Toughened Glass</strong>, <strong>10mm Toughened Glass</strong>, and <strong>12mm Toughened Glass</strong>. We execute <strong>Office Glass Partition Hyderabad</strong>, <strong>IT Office Glass Partition</strong>, <strong>Luxury Office Glass Partition</strong>, <strong>Black Slim Profile Glass Partition</strong>, <strong>Aluminium Glass Partition</strong>, <strong>Frameless Glass Partition</strong>, <strong>Toughened Glass Partition</strong>, <strong>Glass Cabin Partition</strong>, <strong>Commercial Glass Partition</strong>, <strong>Telescopic Glass Partition</strong>, and <strong>Glass Urinal Partition</strong> systems.
+              </p>
+            </div>
+
+            {/* Category 2 */}
+            <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-6">
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-sky-600 shrink-0" />
+                Shower Cubicles &amp; Bathroom Glass
+              </h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Custom-engineered <strong>Shower Cubicle Hyderabad</strong> and <strong>Glass Shower Cubicle</strong> installations built with <strong>10mm Toughened Glass Shower Cubicle</strong> panels. Choose from <strong>Frameless Shower Cubicle</strong>, <strong>Sliding Shower Cubicle</strong>, <strong>Luxury Shower Enclosure</strong>, <strong>Bathroom Glass Partition</strong>, <strong>Shower Glass Door</strong>, <strong>Bathroom Glass Door</strong>, and illuminated <strong>Bathroom LED Mirror</strong> &amp; <strong>LED Mirror</strong> designs.
+              </p>
+            </div>
+
+            {/* Category 3 */}
+            <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-6">
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                <Layers className="w-5 h-5 text-sky-600 shrink-0" />
+                Glass Doors, Railings &amp; Structural Glazing
+              </h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Precision <strong>Glass Door Installation</strong> and <strong>Toughened Glass Installation</strong> by experienced <strong>Glass Installation Contractors</strong> for <strong>Toughened Glass Door</strong>, <strong>Glass Sliding Door</strong>, <strong>Glass Swing Door</strong>, <strong>Glass Main Door</strong>, <strong>Slim Profile Glass Door</strong>, and <strong>Office Glass Door</strong>. We also deliver <strong>Glass Railing Hyderabad</strong>, <strong>Staircase Glass Railing</strong>, <strong>Balcony Glass Railing</strong>, <strong>Structural Glazing Hyderabad</strong>, <strong>Spider Glass Fitting</strong>, <strong>Spider Glass Facade</strong>, and <strong>Glass Facade Work</strong>.
+              </p>
+            </div>
+
+            {/* Category 4 */}
+            <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-6">
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-sky-600 shrink-0" />
+                Decorative Glass &amp; Custom Finishes
+              </h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Elevate villas, corporate lobbies, and retail showrooms with designer <strong>Lacquered Glass</strong>, <strong>Decorative Glass</strong>, <strong>Fluted Glass</strong>, <strong>Digital Printed Glass</strong>, and custom <strong>Luxury Glass Partition</strong> accents. Backed by genuine <strong>Saint-Gobain Glass Hyderabad</strong> and certified <strong>Toughened Glass in Hyderabad</strong> craftsmanship.
+              </p>
+            </div>
+          </div>
+
+          {/* Service Locations Across Hyderabad */}
+          <div className="bg-sky-50/70 border border-sky-200/80 rounded-2xl p-6">
+            <div className="flex items-center gap-2 text-base font-bold text-slate-900 mb-3">
+              <MapPin className="w-5 h-5 text-sky-600 shrink-0" />
+              Glass Contractors Serving Prime Locations Across Hyderabad, Telangana
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {[
+                "Banjara Hills",
+                "Jubilee Hills",
+                "Hitech City",
+                "Gachibowli",
+                "Madhapur",
+                "Financial District",
+                "Nanakramguda",
+                "Secunderabad",
+                "Begumpet",
+                "Goshamahal",
+                "Hyderabad Telangana"
+              ].map((location) => (
+                <span
+                  key={location}
+                  className="bg-white border border-sky-200 text-slate-700 text-xs sm:text-sm font-semibold px-3.5 py-1.5 rounded-full shadow-xs"
+                >
+                  {location}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </section>
