@@ -40,6 +40,7 @@ export default function Footer() {
             <li><Link href="/" className="hover:text-white transition">Home Overview</Link></li>
             <li><Link href="/services" className="hover:text-white transition">Our Services</Link></li>
             <li><Link href="/projects" className="hover:text-white transition">Projects</Link></li>
+            <li><Link href="/gallery" className="hover:text-white transition">Gallery</Link></li>
             <li><Link href="/why-us" className="hover:text-white transition">About Us</Link></li>
             <li><Link href="/contact" className="hover:text-white transition">Contact Us</Link></li>
             <li><Link href="/services#calculator" className="hover:text-white transition">Glass Cost Estimator</Link></li>
