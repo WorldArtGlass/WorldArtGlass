@@ -6,13 +6,17 @@ import Link from "next/link";
 import Navbar, { WhatsAppIcon } from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import EnquiryForm from "@/components/EnquiryForm";
 import {
   Sparkles,
   X,
   ChevronLeft,
   ChevronRight,
   MapPin,
-  Play
+  Play,
+  Film,
+  Building2,
+  Phone
 } from "lucide-react";
 
 type GalleryVideo = {
@@ -25,6 +29,14 @@ type GalleryVideo = {
 };
 
 const galleryVideos: GalleryVideo[] = [
+  {
+    id: "v-curved-rose-gold",
+    title: "Curved Rose-Gold Slim Profile Cabins",
+    category: "partitions",
+    categoryLabel: "Office Partitions",
+    location: "Hitec City, Hyderabad",
+    src: "/videos/luxury_office_curved_glass_showcase.mp4"
+  },
   {
     id: "v-fluted-telescopic",
     title: "Fluted Glass Telescopic Sliding Partition",
@@ -126,36 +138,36 @@ export default function GalleryPage() {
       <Navbar />
 
       {/* Hero Banner */}
-      <section className="relative bg-slate-950 text-white overflow-hidden pt-28 sm:pt-32 pb-16 md:pb-24 px-4 sm:px-6 lg:px-8">
+      <section className="relative bg-[#0B1B2B] text-white overflow-hidden pt-28 sm:pt-36 pb-16 md:pb-24 px-4 sm:px-6 lg:px-8">
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/hero_luxury_terrace_v2.jpg"
             alt="World Art Glass Hyderabad Video Gallery"
             fill
-            className="object-cover object-center opacity-40"
+            className="object-cover object-center opacity-30 mix-blend-luminosity"
             priority
           />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/40 z-0" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1B2B] via-[#0B1B2B]/85 to-[#0B1B2B]/60 z-0" />
 
         <div className="relative z-10 max-w-7xl mx-auto">
           <div className="max-w-3xl">
-            <div className="flex items-center gap-2 text-xs font-semibold text-sky-400 mb-4 uppercase tracking-wider">
+            <nav className="flex items-center gap-2 text-xs font-semibold text-[#D4AF37] mb-4 uppercase tracking-wider">
               <Link href="/" className="hover:text-white transition">Home</Link>
-              <span>/</span>
-              <span className="text-white">Gallery</span>
-            </div>
+              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+              <span className="text-white">Video Gallery</span>
+            </nav>
 
-            <div className="inline-flex items-center gap-2 bg-sky-500/10 border border-sky-400/30 text-sky-300 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase mb-4 backdrop-blur-md">
-              <Sparkles className="w-3.5 h-3.5 text-sky-400" />
-              Real Site Walkthroughs &amp; Installations
+            <div className="inline-flex items-center gap-2 bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#D4AF37] px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase mb-4 backdrop-blur-md">
+              <Sparkles className="w-3.5 h-3.5" />
+              10 Verified Site Walkthrough Videos
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight mb-4">
-              Architectural Glass Video Gallery
+              Architectural Glass Site Video Gallery
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+            <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
               Watch real Hyderabad site videos of our Saint-Gobain Toughened Glass partitions, fluted telescopic sliding doors, frameless &amp; black-profile shower cubicles, spider glass facades, and verified client handovers.
             </p>
           </div>
@@ -168,11 +180,14 @@ export default function GalleryPage() {
           {/* Header & Filter Pills */}
           <div className="flex flex-wrap items-center justify-between gap-4 mb-10 pb-6 border-b border-slate-200">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              <span className="text-xs uppercase tracking-wider font-bold text-[#C5A059]">
+                Verified Site Documentation
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1B2B] tracking-tight">
                 Site Execution Videos ({filtered.length})
               </h2>
-              <p className="text-slate-500 text-xs sm:text-sm mt-1">
-                Tap any video to watch full screen with sound &amp; controls or request a similar installation.
+              <p className="text-slate-600 text-xs sm:text-sm mt-1">
+                Tap any video card to launch full-screen interactive player with sound or request a similar design.
               </p>
             </div>
 
@@ -190,9 +205,9 @@ export default function GalleryPage() {
                     setActiveFilter(tab.key);
                     setLightboxIndex(null);
                   }}
-                  className={`text-xs sm:text-sm font-bold px-4 py-2 rounded-full transition whitespace-nowrap shrink-0 ${
+                  className={`text-xs sm:text-sm font-bold px-4 py-2 rounded-full transition whitespace-nowrap shrink-0 cursor-pointer ${
                     activeFilter === tab.key
-                      ? "bg-sky-600 text-white shadow-sm"
+                      ? "bg-[#0B1B2B] text-[#D4AF37] shadow-sm"
                       : "text-slate-600 hover:text-slate-900"
                   }`}
                 >
@@ -202,50 +217,66 @@ export default function GalleryPage() {
             </div>
           </div>
 
-          {/* 2 columns on mobile, 3 columns on desktop */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
-            {filtered.map((item, idx) => (
+          {/* Video Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {filtered.map((item, index) => (
               <div
                 key={item.id}
-                onClick={() => openLightbox(idx)}
-                className="group relative bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-sky-300 transition-all duration-300 cursor-pointer flex flex-col"
+                onClick={() => openLightbox(index)}
+                className="group bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl hover:border-[#D4AF37]/60 transition-all duration-300 cursor-pointer flex flex-col"
               >
-                <div className="relative h-52 xs:h-60 sm:h-80 w-full bg-slate-950 overflow-hidden">
+                {/* Video Container */}
+                <div className="relative aspect-[9/10] sm:aspect-square w-full bg-slate-950 overflow-hidden flex items-center justify-center">
                   <video
                     src={item.src}
-                    autoPlay
-                    loop
-                    muted
                     playsInline
+                    muted
                     preload="metadata"
-                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
                   />
 
-                  {/* Center Play Icon */}
-                  <div className="absolute inset-0 bg-slate-950/10 group-hover:bg-slate-950/30 transition duration-300 flex items-center justify-center">
-                    <div className="bg-slate-950/75 group-hover:bg-[#7dd91a] text-white p-3 rounded-full shadow-lg border border-white/25 transition duration-300 backdrop-blur-sm">
-                      <Play className="w-5 h-5 fill-current" />
+                  {/* Play Button Overlay */}
+                  <div className="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                    <div className="w-14 h-14 rounded-full bg-[#0B1B2B]/90 border border-[#D4AF37] text-[#D4AF37] flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
+                      <Play className="w-6 h-6 fill-current translate-x-0.5" />
                     </div>
                   </div>
 
-                  {/* Category Badge */}
-                  <div className="absolute top-2.5 left-2.5 bg-slate-950/80 backdrop-blur-md text-white text-[11px] sm:text-xs font-bold px-2.5 py-1 rounded-full border border-white/15">
+                  {/* Category Pill */}
+                  <span className="absolute top-3 left-3 bg-[#0B1B2B]/90 text-white border border-[#D4AF37]/30 text-[10px] font-bold px-2.5 py-1 rounded-full backdrop-blur-md">
                     {item.categoryLabel}
-                  </div>
+                  </span>
 
-                  {/* Video Pill Badge */}
-                  <div className="absolute top-2.5 right-2.5 bg-[#7dd91a] text-white text-[10px] sm:text-xs font-extrabold px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1 drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)]">
-                    <Play className="w-3 h-3 fill-current" /> Video
-                  </div>
+                  <span className="absolute top-3 right-3 bg-[#25D366] text-white text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shadow">
+                    <Play className="w-2.5 h-2.5 fill-current" /> Video
+                  </span>
                 </div>
 
-                <div className="p-3 sm:p-4 flex flex-col flex-grow">
-                  <h3 className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-sky-600 transition leading-snug line-clamp-2 mb-1">
-                    {item.title}
-                  </h3>
-                  <div className="flex items-center gap-1 text-xs text-slate-500 font-medium mt-auto">
-                    <MapPin className="w-3.5 h-3.5 text-sky-500 shrink-0" />
-                    <span className="line-clamp-1">{item.location}</span>
+                {/* Card Footer */}
+                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="font-extrabold text-slate-900 text-sm sm:text-base group-hover:text-[#C5A059] transition line-clamp-2">
+                      {item.title}
+                    </h3>
+                    <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-2">
+                      <MapPin className="w-3.5 h-3.5 text-[#C5A059] shrink-0" />
+                      <span>{item.location}</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                    <span className="font-semibold text-[#0B1B2B] group-hover:underline">
+                      Watch Video &rarr;
+                    </span>
+                    <a
+                      href={`https://wa.me/919985597294?text=Hi%20World%20Art%20Glass%2C%20I%20saw%20your%20site%20video%20for%20%22${encodeURIComponent(item.title)}%22%20and%20want%20a%20similar%20installation.`}
+                      onClick={(e) => e.stopPropagation()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 bg-[#25D366] text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shadow"
+                    >
+                      <WhatsAppIcon className="w-3 h-3" /> Quote
+                    </a>
                   </div>
                 </div>
               </div>
@@ -254,78 +285,53 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      {/* Bottom CTA */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-slate-900 text-white">
-        <div className="max-w-3xl mx-auto text-center">
-          <span className="text-xs uppercase tracking-wider font-bold text-sky-400 bg-sky-950 border border-sky-800 px-3 py-1 rounded-full mb-3 inline-block">
-            Custom Fabrication
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-3">
-            Like a Design From Our Video Gallery?
-          </h2>
-          <p className="text-slate-300 text-sm mb-6 leading-relaxed">
-            Share your dimensions on WhatsApp or schedule a free laser site measurement anywhere in Hyderabad, Telangana.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 bg-sky-500 hover:bg-sky-600 text-white font-bold text-sm px-7 py-3.5 rounded-full shadow-lg shadow-sky-500/25 transition transform hover:-translate-y-0.5"
-            >
-              Book Free Site Visit
-            </Link>
-            <a
-              href="https://wa.me/919985597294?text=Hi%20World%20Art%20Glass%2C%20I%20watched%20your%20Gallery%20videos%20and%20would%20like%20a%20quotation%20for%20my%20space."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-[#7dd91a] hover:bg-[#71c917] text-white font-bold text-sm px-7 py-3.5 rounded-full shadow-lg shadow-[#7dd91a]/30 transition transform hover:-translate-y-0.5 drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)]"
-            >
-              <WhatsAppIcon className="w-4 h-4" /> Chat on WhatsApp
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Full-Screen Video Lightbox Modal */}
+      {/* Lightbox Modal */}
       {lightboxIndex !== null && filtered[lightboxIndex] && (
         <div
-          className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex items-center justify-center p-2 sm:p-4 animate-in fade-in duration-200"
           onClick={closeLightbox}
         >
+          {/* Close Button */}
           <button
             onClick={closeLightbox}
-            aria-label="Close lightbox"
-            className="absolute top-4 right-4 z-10 bg-white/10 hover:bg-white/20 text-white p-2.5 rounded-full transition"
+            className="absolute top-4 right-4 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition"
+            aria-label="Close video"
           >
             <X className="w-6 h-6" />
           </button>
 
+          {/* Prev Button */}
           <button
             onClick={(e) => {
               e.stopPropagation();
               showPrev();
             }}
+            className="absolute left-2 sm:left-6 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition"
             aria-label="Previous video"
-            className="absolute left-3 sm:left-6 z-10 bg-white/10 hover:bg-white/20 text-white p-2.5 rounded-full transition"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
 
+          {/* Next Button */}
           <button
             onClick={(e) => {
               e.stopPropagation();
               showNext();
             }}
+            className="absolute right-2 sm:right-6 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition"
             aria-label="Next video"
-            className="absolute right-3 sm:right-6 z-10 bg-white/10 hover:bg-white/20 text-white p-2.5 rounded-full transition"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
 
+          {/* Content Wrapper */}
           <div
-            className="max-w-4xl w-full bg-slate-900 rounded-3xl overflow-hidden border border-white/15 shadow-2xl"
+            className="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative w-full h-[58vh] sm:h-[70vh] bg-slate-950 flex items-center justify-center">
+            <div className="w-full aspect-[9/14] sm:aspect-video max-h-[75vh] bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/20">
               <video
                 key={filtered[lightboxIndex].src}
                 src={filtered[lightboxIndex].src}
@@ -335,28 +341,48 @@ export default function GalleryPage() {
                 className="w-full h-full object-contain"
               />
             </div>
-            <div className="p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3 bg-slate-900 border-t border-white/10">
+
+            {/* Video Meta Info */}
+            <div className="w-full mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-2 text-white">
               <div>
+                <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-wider">
+                  {filtered[lightboxIndex].categoryLabel} • {lightboxIndex + 1} of {filtered.length}
+                </span>
                 <h3 className="text-base sm:text-lg font-bold text-white">
                   {filtered[lightboxIndex].title}
                 </h3>
-                <div className="text-xs sm:text-sm text-slate-400 flex items-center gap-1.5 mt-0.5">
-                  <MapPin className="w-3.5 h-3.5 text-sky-400" />
-                  {filtered[lightboxIndex].location}
+                <div className="flex items-center gap-1.5 text-xs text-slate-300 mt-0.5">
+                  <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" />
+                  <span>{filtered[lightboxIndex].location}</span>
                 </div>
               </div>
-              <a
-                href={`https://wa.me/919985597294?text=Hi%20World%20Art%20Glass%2C%20I%20liked%20*${encodeURIComponent(filtered[lightboxIndex].title)}*%20from%20your%20Gallery.%20Please%20share%20pricing%20details.`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#7dd91a] hover:bg-[#71c917] text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-full shadow-md transition"
-              >
-                <WhatsAppIcon className="w-4 h-4" /> Get Quote for This Look
-              </a>
+
+              <div className="flex items-center gap-2">
+                <a
+                  href={`https://wa.me/919985597294?text=Hi%20World%20Art%20Glass%2C%20I%20am%20watching%20your%20site%20video%20for%20%22${encodeURIComponent(filtered[lightboxIndex].title)}%22%20and%20need%20a%20quotation.`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg transition"
+                >
+                  <WhatsAppIcon className="w-4 h-4" />
+                  <span>Request Similar Execution Quote</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
       )}
+
+      {/* Quote Form Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-slate-100">
+        <div className="max-w-4xl mx-auto">
+          <EnquiryForm
+            title="Book a Free Laser Site Survey in Hyderabad"
+            subtitle="Upload your architectural floor plans or design references (PDF/DWG up to 25MB)."
+            sourcePage="Gallery Video Walkthrough Page"
+          />
+        </div>
+      </section>
 
       <Footer />
       <FloatingWhatsApp />

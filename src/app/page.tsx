@@ -1,11 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Navbar, { WhatsAppIcon } from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import EnquiryForm from "@/components/EnquiryForm";
+import EnquiryModal from "@/components/EnquiryModal";
+import { ALL_SERVICES } from "@/data/servicesData";
+import { ALL_PROJECTS } from "@/data/projectsData";
 import {
   Phone,
   MapPin,
@@ -19,745 +23,494 @@ import {
   ExternalLink,
   Layers,
   Award,
-  Zap,
-  TrendingDown,
-  DoorOpen,
-  ShowerHead,
-  Gem,
-  Palette,
-  Eye,
-  Check,
-  X,
-  Menu,
+  ArrowRight,
+  Play,
+  Calculator,
   Briefcase,
   Home,
   Store,
-  Hotel,
   Compass,
-  Hammer
+  FileText
 } from "lucide-react";
 
-// Products & Services Data
-const servicesList = [
-  {
-    id: "office-partitions",
-    title: "Office Glass Partitions",
-    tag: "Corporate Favorite",
-    thickness: "10mm / 12mm",
-    category: "commercial",
-    image: "/images/cat_office_partitions.jpg",
-    desc: "Modern acoustic glass partitions for IT corporate cabins, conference rooms, meeting suites and collaborative workspaces.",
-    specs: ["Frameless or 45mm Slim Profile", "Acoustic Noise Reduction", "Clear, Frosted or Smart Film"]
-  },
-  {
-    id: "slim-partitions",
-    title: "Black Slim 45mm Partitions",
-    tag: "Trending Minimalist",
-    thickness: "45mm Profile",
-    category: "commercial",
-    image: "/images/cat_black_slim_partitions_v2.jpg",
-    desc: "Ultra-slim 45mm matte black architectural aluminium frame partitions. Industrial loft and Manhattan style grids.",
-    specs: ["45mm High-Tensile Aluminium", "Matte Black & Gunmetal Finish", "#1 Interior Designer Choice"]
-  },
-  {
-    id: "sliding-doors",
-    title: "Frameless & Sliding Glass Doors",
-    tag: "Modern Luxury",
-    thickness: "10mm / 12mm",
-    category: "doors",
-    image: "/images/cat_frameless_sliding_doors.jpg",
-    desc: "Smooth gliding sliding doors, automatic doors, and swing doors equipped with heavy-duty Dorma/Ozone hydraulic floor springs.",
-    specs: ["SS 304 Patch Fittings & Springs", "Long H-Type Matte Handles", "Soft-Close Sliding Track Systems"]
-  },
-  {
-    id: "shower-cubicles",
-    title: "Shower Cubicles & Enclosures",
-    tag: "Bathroom Luxury",
-    thickness: "10mm Toughened",
-    category: "residential",
-    image: "/images/cat_shower_cubicles.jpg",
-    desc: "Custom-built frameless shower enclosures, corner cubicles, and sliding glass partitions with magnetic water seals.",
-    specs: ["10mm Saint-Gobain Extra-Clear", "Anti-Rust Brass / SS304 Hinges", "Anti-Limescale Water Repellent"]
-  },
-  {
-    id: "glass-railings",
-    title: "Glass Railings & Balustrades",
-    tag: "Safety & Panoramic View",
-    thickness: "12mm / Laminated",
-    category: "residential",
-    image: "/images/cat_glass_railings.jpg",
-    desc: "Unobstructed view glass railings for staircases, balconies, and terraces using solid stainless steel spigots or base-shoes.",
-    specs: ["Heavy Duty SS 304 / 316 Spigots", "Frameless or Slim SS Handrails", "Engineered for Wind & Impact Load"]
-  },
-  {
-    id: "acp-glazing",
-    title: "ACP & Structural Glazing",
-    tag: "Commercial Elevation",
-    thickness: "Curtain Facade",
-    category: "commercial",
-    image: "/images/cat_acp_structural_glazing.jpg",
-    desc: "Spider glazing, curtain wall structural glazing, and Aluminium Composite Panel (ACP) cladding for showrooms and IT towers.",
-    specs: ["Aludecor / Alstone Grade ACP", "Saint-Gobain Solar Control Glass", "Executed Hindware Experience Centre"]
-  },
-  {
-    id: "toughened-glass",
-    title: "Toughened Saint-Gobain Glass",
-    tag: "Core Specialty",
-    thickness: "5mm to 12mm",
-    category: "glass",
-    image: "/images/cat_toughened_glass.jpg",
-    desc: "High-strength thermal toughened safety glass with superior thermal shock resistance, CNC diamond-polished beveled edges.",
-    specs: ["5mm, 6mm, 8mm, 10mm, 12mm", "100% Genuine Saint-Gobain", "Laser Logo on Every Panel"]
-  },
-  {
-    id: "led-mirrors",
-    title: "LED Mirrors & Smart Vanity",
-    tag: "Smart Vanity",
-    thickness: "5mm Flabeg",
-    category: "decorative",
-    image: "/images/cat_led_mirrors.jpg",
-    desc: "Luxury backlit LED mirrors with feather-touch dimmer, 3-color light tuning (Warm, Natural, Cool White) and anti-fog heating.",
-    specs: ["Capsule, Round, Oval, Irregular", "Touch Sensor & Defogger Pad", "Copper-Free High Definition"]
-  },
-  {
-    id: "stained-glass",
-    title: "Stained & Designer Glass",
-    tag: "Artisan Craft",
-    thickness: "Custom Thickness",
-    category: "decorative",
-    image: "/images/cat_stained_designer_glass.jpg",
-    desc: "Hand-crafted stained glass, decorative leaded glass, floral motifs, acid-etched glass, and lacquered glass for feature walls.",
-    specs: ["Pooja Rooms, Domes & Villas", "Sandblasted, Etched & Bevelled", "100% Custom Bespoke Artworks"]
-  },
-  {
-    id: "custom-glass",
-    title: "Custom Glass & Interiors",
-    tag: "Bespoke Specs",
-    thickness: "Custom Tailored",
-    category: "decorative",
-    image: "/images/cat_custom_glass_interiors.jpg",
-    desc: "Custom glass works for interior designers: fluted glass wardrobe doors, lacquered kitchen splashbacks, bend glass & shelves.",
-    specs: ["Fluted, Reeded, Tinted Bronze", "Precision CNC Cutting & Routing", "Architectural Grade Lacquered Glass"]
-  }
-];
+export default function HomePage() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalService, setModalService] = useState("Office Glass Partitions");
+  const [activeServiceTab, setActiveServiceTab] = useState<string>("commercial");
 
-// Real Live Projects Data
-const liveProjects = [
-  {
-    id: 1,
-    title: "Hindware Experience Centre",
-    subtitle: "Structural Glazing & ACP Facade Elevation",
-    location: "Hyderabad",
-    category: "Commercial Glazing",
-    image: "/images/project_hindware_glazing_v2.jpg"
-  },
-  {
-    id: 2,
-    title: "Corporate Executive Cabins",
-    subtitle: "10mm Saint-Gobain Acoustic Glass Partitions",
-    location: "Madhapur, Hyderabad",
-    category: "Office Partitions",
-    image: "/images/project_office_cabin.jpg"
-  },
-  {
-    id: 3,
-    title: "Black Slim 45mm Grid Doors",
-    subtitle: "Industrial Architectural Profile with Dorma Hardware",
-    location: "Gachibowli, Hyderabad",
-    category: "Office Partitions",
-    image: "/images/project_grid_doors_v2.jpg"
-  },
-  {
-    id: 4,
-    title: "Frameless Double Sliding Doors",
-    subtitle: "Commercial Entrance with Floor Springs",
-    location: "Banjara Hills, Hyderabad",
-    category: "Doors & Sliding",
-    image: "/images/project_double_doors.jpg"
-  },
-  {
-    id: 5,
-    title: "Luxury Showroom Glass Wall",
-    subtitle: "Full Height 12mm Saint-Gobain Clear Display",
-    location: "Hitec City, Hyderabad",
-    category: "Showroom",
-    image: "/images/project_big_partition.jpg"
-  },
-  {
-    id: 6,
-    title: "World Art Glass Concept Store",
-    subtitle: "Flagship Showroom & Technical Office",
-    location: "Aghapura, Goshamahal, Hyderabad",
-    category: "Storefront",
-    image: "/images/storefront_real.jpg"
-  }
-];
+  // Calculator State
+  const [calcService, setCalcService] = useState("office-partition");
+  const [calcWidth, setCalcWidth] = useState<number>(10);
+  const [calcHeight, setCalcHeight] = useState<number>(8.5);
+  const [calcGlassType, setCalcGlassType] = useState<string>("10mm-toughened");
 
-// Verified Client Reviews Data (8 Detailed Reviews for Auto Carousel)
-const reviewsList = [
-  {
-    name: "Rahul Krishna",
-    role: "IT Operations Manager, Madhapur",
-    tag: "Office Partition",
-    tagColor: "bg-sky-50 text-sky-600",
-    text: "World Art Glass installed office partitions with black slim aluminium frames for our 4,000 sq ft office in Madhapur. The finish is top notch, Saint-Gobain 10mm glass is crystal clear, and the team completed everything 2 days before deadline!"
-  },
-  {
-    name: "Syed Ahmed",
-    role: "Villa Owner, Jubilee Hills",
-    tag: "Shower Cubicle",
-    tagColor: "bg-[#7dd91a]/15 text-[#5ea313]",
-    text: "Ordered two frameless shower cubicles and staircase glass railings with spigots for our new duplex villa in Jubilee Hills. Their laser measurement was spot on, fittings are heavy duty SS 304, and pricing was honest."
-  },
-  {
-    name: "Vikram Patil",
-    role: "Principal Designer, Banjara Hills",
-    tag: "Architect Partner",
-    tagColor: "bg-purple-50 text-purple-600",
-    text: "As an interior designer, I need zero defects. World Art Glass Hyderabad has been my go-to glass fabrication partner for 3 years. From custom LED mirrors to 45mm black slim partitions, their craftsmanship is unmatched."
-  },
-  {
-    name: "Neha Sharma",
-    role: "Managing Director, TechSpace Gachibowli",
-    tag: "Acoustic Partition",
-    tagColor: "bg-sky-50 text-sky-600",
-    text: "Exceptional acoustic soundproofing on our board room glass partitions. No echo, zero rattling, and the hydraulic soft-close sliding doors work like butter. Super professional team!"
-  },
-  {
-    name: "Rajeshwar Rao",
-    role: "Commercial Developer, Financial District",
-    tag: "Structural Glazing",
-    tagColor: "bg-amber-50 text-amber-700",
-    text: "Executed spider glazing and structural facade glass for our 5-storey commercial complex. They provided official Saint-Gobain batch test certificates and full GST invoices. Highly recommended in Hyderabad."
-  },
-  {
-    name: "Dr. Ananya Reddy",
-    role: "Luxury Penthouse Owner, Banjara Hills",
-    tag: "Balcony Railing",
-    tagColor: "bg-[#7dd91a]/15 text-[#5ea313]",
-    text: "Custom smart LED mirrors and frameless glass balcony railings installed with SS 316 spigots. The panoramic view is completely unobstructed and the glass quality feels solid and ultra-safe."
-  },
-  {
-    name: "Mohammed Zeeshan",
-    role: "Principal Architect, Studio Matrix, Begumpet",
-    tag: "Laser Precision",
-    tagColor: "bg-purple-50 text-purple-600",
-    text: "Their digital laser site survey is remarkably precise. Even with slight wall misalignments, their custom-cut Saint-Gobain glass fitted with sub-millimeter accuracy without any ugly caulking."
-  },
-  {
-    name: "Sridhar Varma",
-    role: "Retail Store Owner, Kondapur",
-    tag: "Sliding Doors",
-    tagColor: "bg-sky-50 text-sky-600",
-    text: "Delivered 12mm heavy-duty sliding glass entrance doors with Dorma floor springs for our retail showroom. Prompt delivery, factory-direct wholesale pricing, and spotless clean installation."
-  }
-];
+  const openQuoteModal = (serviceName?: string) => {
+    if (serviceName) setModalService(serviceName);
+    setModalOpen(true);
+  };
 
-const tickerItems = [
-  { text: "Toughened Saint-Gobain Glass", highlight: true },
-  { text: "Black Slim 45mm Partitions", highlight: false },
-  { text: "Frameless Sliding Glass Doors", highlight: false },
-  { text: "Free Laser Site Survey in Hyderabad", highlight: true },
-  { text: "38dB Acoustic Sound Isolation", highlight: false },
-  { text: "Luxury Frameless Shower Cubicles", highlight: false },
-  { text: "SS 304 Glass Railings & Balustrades", highlight: false },
-  { text: "Spider & Structural Facade Glazing", highlight: false },
-  { text: "100% Genuine Saint-Gobain Certified", highlight: true },
-  { text: "Smart LED Touch Vanity Mirrors", highlight: false },
-  { text: "Official GST Registered Fabricator", highlight: false },
-  { text: "1,500+ Completed Projects Across Telangana", highlight: true }
-];
+  // Calculator Logic
+  const calculateEstimate = () => {
+    const area = (calcWidth || 0) * (calcHeight || 0);
+    let ratePerSqFt = 240;
 
-export default function WorldArtGlassPage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+    if (calcService === "office-partition") {
+      ratePerSqFt = calcGlassType === "12mm-toughened" ? 280 : 230;
+    } else if (calcService === "black-slim-partition") {
+      ratePerSqFt = calcGlassType === "12mm-toughened" ? 380 : 330;
+    } else if (calcService === "shower-cubicle") {
+      ratePerSqFt = 360;
+    } else if (calcService === "glass-railing") {
+      ratePerSqFt = 480;
+    } else if (calcService === "toughened-supply") {
+      ratePerSqFt = calcGlassType === "12mm-toughened" ? 180 : 140;
+    }
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 25);
-    };
+    const total = Math.round(area * ratePerSqFt);
+    return { area: Math.round(area), total, rate: ratePerSqFt };
+  };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const estimate = calculateEstimate();
 
-  const featuredSolutions = servicesList.slice(0, 4);
+  const commercialServices = ALL_SERVICES.filter((s) => s.category === "commercial");
+  const doorsFacades = ALL_SERVICES.filter((s) => s.category === "doors-facades");
+  const decorative = ALL_SERVICES.filter((s) => s.category === "residential-decorative");
+
+  const displayedServices =
+    activeServiceTab === "commercial"
+      ? commercialServices
+      : activeServiceTab === "doors-facades"
+      ? doorsFacades
+      : decorative;
+
+  const featuredProjects = ALL_PROJECTS.slice(0, 6);
+
+  const testimonials = [
+    {
+      name: "Sandeep Reddy",
+      company: "Tech Mahindra Partner Facility",
+      location: "Hitec City, Hyderabad",
+      rating: 5,
+      review:
+        "World Art Glass installed over 3,500 sq.ft of 12mm Saint-Gobain acoustic glass partitions for our IT corporate cabins in Hitec City. The acoustic isolation is outstanding, and their team completed the handover 2 days ahead of schedule with full GST documentation.",
+      service: "Office Glass Partitions"
+    },
+    {
+      name: "Kavitha Nambiar",
+      company: "Studio Artha Architects",
+      location: "Banjara Hills, Hyderabad",
+      rating: 5,
+      review:
+        "As an interior architect, I am extremely particular about sightlines and finishes. World Art Glass's 45mm matte black slim profile partitions and fluted telescopic doors for our luxury villa project were executed with millimeter precision. Highly recommended!",
+      service: "Black Slim Partitions & Fluted Glass"
+    },
+    {
+      name: "Mohammed Imran",
+      company: "Prime Commercial Properties",
+      location: "Gachibowli, Hyderabad",
+      rating: 5,
+      review:
+        "We hired World Art Glass for structural spider glazing and ACP cladding on our commercial showroom front. Their factory-direct pricing saved us nearly 20% compared to intermediary contractors, with 100% genuine Saint-Gobain glass.",
+      service: "Spider Glass Facades & ACP"
+    }
+  ];
+
+  const targetAudiences = [
+    {
+      icon: Briefcase,
+      title: "IT Companies & Corporates",
+      desc: "Acoustic meeting suites, 38dB soundproof cabins, and minimalist black slim partitions across Hitec City & Gachibowli."
+    },
+    {
+      icon: Compass,
+      title: "Architects & Interior Designers",
+      desc: "Bespoke fluted glass, telescopic sliding systems, curved toughened glass, and precision CAD/DWG shop drawing support."
+    },
+    {
+      icon: Building2,
+      title: "Commercial Property Developers",
+      desc: "Turnkey structural curtain walls, spider glass elevations, and ACP cladding delivered on tight institutional schedules."
+    },
+    {
+      icon: Store,
+      title: "Retail & Commercial Showrooms",
+      desc: "High-transparency frameless 12mm storefronts, heavy-duty Dorma patch doors, and high-security locks (as built for Jio & Peter England)."
+    },
+    {
+      icon: Home,
+      title: "Luxury Villa & Penthouse Owners",
+      desc: "Frameless 10mm shower cubicles, SS 316 glass balustrades, Smart LED mirrors, and lacquered glass modular kitchen splashbacks."
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
-      
-      {/* Persistent Static / Fixed Header Navigation Bar */}
       <Navbar />
 
-      {/* Hero Container with Full-Bleed Architectural Glazing Profiles Background Matching Reference Style */}
-      <section id="home" className="relative bg-[#0262ac] text-white overflow-hidden min-h-[580px] sm:min-h-[640px] lg:min-h-[720px] flex flex-col justify-center pt-28 sm:pt-36 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8">
-        {/* Background Image Matching Reference Style */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/hero_glazing_profiles.jpg"
-            alt="World Art Glass Architectural Toughened Glass and Window Glazing Profiles Hyderabad"
-            fill
-            quality={95}
-            priority
-            className="object-cover object-right sm:object-right md:object-right lg:object-[center_right] xl:object-center"
-          />
-          {/* Subtle gradient overlay on mobile & wide screens for optimal text contrast */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0262ac] via-[#0262ac]/90 sm:via-[#0262ac]/65 md:via-[#0262ac]/25 to-transparent pointer-events-none" />
+      {/* 1. HERO BANNER REDESIGN (Requirement #6 & #7) */}
+      <section className="relative bg-[#0B1B2B] text-white overflow-hidden pt-28 sm:pt-36 pb-20 md:pb-28 px-4 sm:px-6 lg:px-8 border-b border-[#D4AF37]/30">
+        {/* Architectural Visual Backdrop with Video */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster="/images/hero_glazing_profiles.jpg"
+            className="w-full h-full object-cover opacity-25 mix-blend-luminosity"
+          >
+            <source src="/videos/luxury_office_curved_glass_showcase.mp4" type="video/mp4" />
+          </video>
         </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1B2B] via-[#0B1B2B]/85 to-[#0B1B2B]/60 z-0"></div>
 
-        {/* Hero Section Content (Left-Aligned, Clean Modern White Typography matching reference) */}
-        <div className="relative z-10 max-w-7xl mx-auto w-full">
-          <div className="max-w-xl lg:max-w-2xl">
-            {/* Pill Tag */}
-            <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-white/15 backdrop-blur-md border border-white/25 text-white px-3 sm:px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-4 sm:mb-5 shadow-sm">
-              <Sparkles className="w-3.5 h-3.5 text-sky-200" />
-              Toughened Saint-Gobain Glass Solutions • Hyderabad
+        <div className="relative z-10 max-w-7xl mx-auto">
+          <div className="max-w-4xl">
+            {/* Heritage Trust Badge */}
+            <div className="inline-flex items-center gap-2 bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#D4AF37] px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase mb-5 backdrop-blur-md shadow-lg">
+              <Award className="w-3.5 h-3.5" />
+              <span>19+ Years of Industry Experience • Founded in 2007</span>
             </div>
 
-            {/* Headline in Bold White (Uppercase matching reference image) */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase leading-[1.15] sm:leading-[1.12] mb-3.5 sm:mb-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
-              Making Every Space A Masterpiece
+            {/* EXACT Headline Required by User (Requirement #7) */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.15] mb-5">
+              WORLD ART GLASS – PREMIUM ARCHITECTURAL GLASS SOLUTIONS IN HYDERABAD.
             </h1>
 
-            {/* Sub-paragraph */}
-            <p className="text-xs sm:text-base text-blue-50/90 font-normal leading-relaxed mb-6 sm:mb-8 max-w-lg drop-shadow-sm">
-              We specialize in Toughened Saint-Gobain Glass solutions for IT Companies, Offices, Luxury Villas, Apartments, Showrooms &amp; Commercial Facades across Hyderabad.
+            {/* Sub-headline & Value Proposition (Requirement #8) */}
+            <p className="text-base sm:text-lg md:text-xl text-slate-300 leading-relaxed max-w-3xl mb-8">
+              Hyderabad’s premier glass contractor and fabricator specializing in 100% genuine Saint-Gobain Toughened Glass, Office Glass Partitions, Black Slim Profile 45mm Cabins, Spider Glazing Facades, Frameless Shower Cubicles, and Luxury Balustrades.
             </p>
 
-            {/* Dual Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-8 sm:mb-10">
-              <a
-                href="#services"
-                className="inline-flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold text-xs sm:text-sm px-6 py-2.5 sm:py-3 rounded-full border border-white/40 transition shadow-md"
+            {/* Prominent CTAs (Requirement #31) */}
+            <div className="flex flex-wrap items-center gap-3.5 mb-10">
+              <button
+                onClick={() => openQuoteModal("Office Glass Partitions")}
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#C5A059] hover:from-[#E5C158] hover:to-[#D4AF37] text-slate-950 font-extrabold text-sm sm:text-base px-6 py-3.5 rounded-xl shadow-xl shadow-[#D4AF37]/25 transition transform hover:-translate-y-0.5 cursor-pointer"
               >
-                <Layers className="w-4 h-4 text-white" /> Services
-              </a>
+                <span>Get Free Quotation</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
 
               <a
-                href="https://wa.me/919985597294?text=Hi%20World%20Art%20Glass%2C%20I%20want%20to%20book%20a%20Free%20Site%20Measurement%20for%20my%20property%20in%20Hyderabad."
+                href="https://wa.me/919985597294?text=Hi%20World%20Art%20Glass%2C%20I%20am%20interested%20in%20architectural%20glass%20solutions%20in%20Hyderabad.%20Please%20share%20quotation."
                 target="_blank"
-                className="inline-flex items-center justify-center gap-2 bg-[#7dd91a] hover:bg-[#71c917] text-white font-bold text-xs sm:text-sm px-6 py-2.5 sm:py-3 rounded-full shadow-lg shadow-[#7dd91a]/30 transition transform hover:-translate-y-0.5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm sm:text-base px-5 py-3.5 rounded-xl shadow-lg transition transform hover:-translate-y-0.5"
               >
-                <WhatsAppIcon className="w-4 h-4" /> WhatsApp Now
+                <WhatsAppIcon className="w-5 h-5" />
+                <span>WhatsApp Now</span>
               </a>
 
-              {/* Trust Motto Pill */}
-              <div className="inline-flex items-center gap-2 sm:gap-3 bg-black/30 backdrop-blur-md border border-white/20 px-3.5 py-1.5 rounded-full text-[10px] sm:text-xs font-bold text-white tracking-wider uppercase">
-                <span className="flex items-center gap-1 text-sky-200"><CheckCircle2 className="w-3 h-3 text-[#7dd91a]" /> Strong</span>
-                <span className="text-white/40">•</span>
-                <span className="flex items-center gap-1 text-sky-200"><CheckCircle2 className="w-3 h-3 text-[#7dd91a]" /> Stylish</span>
-                <span className="text-white/40">•</span>
-                <span className="flex items-center gap-1 text-sky-200"><CheckCircle2 className="w-3 h-3 text-[#7dd91a]" /> Trusted</span>
-              </div>
-            </div>
-
-            {/* Bottom Hero Stats Row (Directly matching reference image 3!) */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-xl pt-6 border-t border-white/20">
-              <div>
-                <div className="text-xl sm:text-3xl font-extrabold text-white tracking-tight">25+ YRS</div>
-                <div className="text-[10px] sm:text-xs text-blue-100 font-medium mt-0.5">In Hyderabad</div>
-              </div>
-              <div>
-                <div className="text-xl sm:text-3xl font-extrabold text-white tracking-tight">1,500+</div>
-                <div className="text-[10px] sm:text-xs text-blue-100 font-medium mt-0.5">Projects Done</div>
-              </div>
-              <div>
-                <div className="text-xl sm:text-3xl font-extrabold text-white tracking-tight">4.9 ★</div>
-                <div className="text-[10px] sm:text-xs text-blue-100 font-medium mt-0.5">188+ Reviews</div>
-              </div>
-              <div>
-                <div className="text-xl sm:text-3xl font-extrabold text-white tracking-tight">100%</div>
-                <div className="text-[10px] sm:text-xs text-blue-100 font-medium mt-0.5">Saint-Gobain</div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* Spotlight Feature Section (Curved Light Sky-Blue Container Matching Reference Image) */}
-      <section id="solutions" className="pt-4 sm:pt-6 pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-gradient-to-br from-sky-50 via-sky-100/60 to-blue-50 border border-sky-200/70 rounded-3xl p-6 sm:p-10 lg:p-12 shadow-sm">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-              
-              {/* Left Column Text */}
-              <div>
-                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-sky-700 bg-sky-200/60 px-3 py-1 rounded-full mb-4">
-                  <Building2 className="w-3.5 h-3.5 text-sky-600" /> Comprehensive Glass Platform
-                </span>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-5">
-                  A Premier Architectural Glass Service Provider in Telangana
-                </h2>
-                <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-6">
-                  World Art Glass Hyderabad is a leading Glass Company, Dealer &amp; Installation Contractor with a dedicated showroom and glass fabrication unit in Goshamahal, Hyderabad. We deliver end-to-end 8mm, 10mm &amp; 12mm Saint-Gobain Toughened Glass solutions — including IT Office &amp; Black Slim Profile Glass Partitions, Telescopic &amp; Frameless Partitions, Shower Cubicles, Glass Sliding &amp; Swing Doors, Staircase &amp; Balcony Glass Railings, Spider Glass Facades, Structural Glazing, Lacquered/Fluted Glass &amp; LED Mirrors across Banjara Hills, Jubilee Hills, Hitech City, Gachibowli, Madhapur, Financial District, Nanakramguda, Secunderabad &amp; Begumpet.
-                </p>
-
-                <div className="grid grid-cols-2 gap-4 mb-8">
-                  <div className="bg-white/80 backdrop-blur-sm border border-sky-200 rounded-2xl p-4">
-                    <div className="font-bold text-slate-900 text-sm mb-1 flex items-center gap-1.5">
-                      <CheckCircle2 className="w-4 h-4 text-[#7dd91a]" /> Free Measurement
-                    </div>
-                    <div className="text-xs text-slate-500">Laser survey anywhere in Hyderabad at zero cost.</div>
-                  </div>
-                  <div className="bg-white/80 backdrop-blur-sm border border-sky-200 rounded-2xl p-4">
-                    <div className="font-bold text-slate-900 text-sm mb-1 flex items-center gap-1.5">
-                      <CheckCircle2 className="w-4 h-4 text-[#7dd91a]" /> Official Tax GST
-                    </div>
-                    <div className="text-xs text-slate-500">Registered entity: 36GPSPS7449Q1ZB.</div>
-                  </div>
-                </div>
-
-                <a
-                  href="#contact"
-                  className="inline-flex items-center gap-2 bg-[#7dd91a] hover:bg-[#71c917] text-white font-bold text-sm px-6 py-3 rounded-full shadow-md shadow-[#7dd91a]/25 transition transform hover:-translate-y-0.5 drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)]"
-                >
-                  Book Free Site Measurement
-                </a>
-              </div>
-
-              {/* Right Column Image (Official World Art Glass Luxury Concept Storefront) */}
-              <div className="relative aspect-video lg:h-[400px] rounded-3xl overflow-hidden shadow-xl border border-sky-200/90 group">
-                <Image
-                  src="/images/storefront_real.jpg"
-                  alt="World Art Glass Luxury Concept Storefront Goshamahal Hyderabad"
-                  fill
-                  className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                  priority
-                />
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Goal / Value Proposition Section ("Our Goal Of Making Every Project A Success") */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center mb-12">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Our Goal Of Making Every <span className="text-sky-600">Project A Success</span>
-          </h2>
-          <p className="text-slate-500 text-sm sm:text-base mt-2 max-w-2xl mx-auto">
-            Combining authentic Saint-Gobain safety glass with certified in-house craftsmanship.
-          </p>
-        </div>
-
-        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Card 1 */}
-          <div className="bg-sky-50/70 border border-sky-100 rounded-3xl p-6 transition hover:shadow-md hover:border-sky-300">
-            <div className="w-12 h-12 rounded-2xl bg-sky-500/10 text-sky-600 flex items-center justify-center mb-4">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
-            <div className="text-xl font-bold text-slate-900 mb-1">100% Genuine</div>
-            <div className="text-xs font-semibold text-sky-600 mb-2">Saint-Gobain Toughened</div>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Every glass panel carries official laser-engraved certification stamps for guaranteed safety and high thermal shock resistance.
-            </p>
-          </div>
-
-          {/* Card 2 */}
-          <div className="bg-[#7dd91a]/10 border border-[#7dd91a]/25 rounded-3xl p-6 transition hover:shadow-md hover:border-[#7dd91a]">
-            <div className="w-12 h-12 rounded-2xl bg-[#7dd91a]/20 text-[#5ea313] flex items-center justify-center mb-4">
-              <Zap className="w-6 h-6 text-[#5ea313]" />
-            </div>
-            <div className="text-xl font-bold text-slate-900 mb-1">35% Faster</div>
-            <div className="text-xs font-semibold text-[#5ea313] mb-2">On-Time Execution</div>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              With full in-house fabrication and local installation vans in Hyderabad, we finish your partitions days ahead of schedule.
-            </p>
-          </div>
-
-          {/* Card 3 */}
-          <div className="bg-blue-50/70 border border-blue-100 rounded-3xl p-6 transition hover:shadow-md hover:border-blue-300">
-            <div className="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-600 flex items-center justify-center mb-4">
-              <TrendingDown className="w-6 h-6" />
-            </div>
-            <div className="text-xl font-bold text-slate-900 mb-1">15% Lower Cost</div>
-            <div className="text-xs font-semibold text-blue-600 mb-2">Factory Direct Rates</div>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Transparent, competitive pricing directly from the supplier with no middleman agent commissions and full GST compliance.
-            </p>
-          </div>
-
-          {/* Card 4 */}
-          <div className="bg-indigo-50/70 border border-indigo-100 rounded-3xl p-6 transition hover:shadow-md hover:border-indigo-300">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-600 flex items-center justify-center mb-4">
-              <Award className="w-6 h-6" />
-            </div>
-            <div className="text-xl font-bold text-slate-900 mb-1">99% Quality &amp; Safety</div>
-            <div className="text-xs font-semibold text-indigo-600 mb-2">Precision Installation</div>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Accurate laser survey, CNC diamond-polished edges, and Dorma/Ozone architectural hardware ensuring zero rattling or sagging.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* "Our Solution" / Products & Services Section (Curved Light Sky Container Matching Reference Image) */}
-      <section id="services" className="py-12 sm:py-16 px-3 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-gradient-to-b from-sky-100/70 via-sky-50 to-white border border-sky-200/80 rounded-3xl p-3 sm:p-6 lg:p-10 shadow-sm">
-            
-            <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-              <div>
-                <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Our Solutions</h2>
-                <p className="text-slate-500 text-sm mt-1">High-performance architectural glass customized for modern spaces.</p>
-              </div>
-
-              <Link
-                href="/services"
-                className="inline-flex items-center gap-1.5 text-xs font-bold bg-sky-500 hover:bg-sky-600 text-white px-5 py-2.5 rounded-full transition shadow-md"
+              <a
+                href="tel:+919985597294"
+                className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold text-sm sm:text-base px-5 py-3.5 rounded-xl transition"
               >
-                View All Services
+                <Phone className="w-4 h-4 text-[#D4AF37]" />
+                <span>Call Now: +91 99855 97294</span>
+              </a>
+            </div>
+
+            {/* Value Trust Bar */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-white/15 text-xs text-slate-300">
+              <div className="flex items-center gap-2">
+                <Ruler className="w-4 h-4 text-[#D4AF37] shrink-0" />
+                <span>Free Laser Site Measurement</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-[#D4AF37] shrink-0" />
+                <span>100% Genuine Saint-Gobain</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Building2 className="w-4 h-4 text-[#D4AF37] shrink-0" />
+                <span>Direct Factory Wholesale Rate</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-[#D4AF37] shrink-0" />
+                <span>GST Tax Invoiced Billing</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 2. CLIENT PORTFOLIO BANNER (Requirement #20: Jio Stores, Peter England, Being Human, Hindware) */}
+      <section className="bg-white border-b border-slate-200 py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-6">
+            <span className="text-[11px] font-bold text-[#C5A059] uppercase tracking-wider">
+              Trusted for Flagship Architectural Executions Across Hyderabad &amp; Telangana
+            </span>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 md:gap-14 opacity-90">
+            <Link
+              href="/projects/jio-stores-retail-facade"
+              className="flex items-center gap-2 hover:opacity-100 transition group"
+            >
+              <div className="w-9 h-9 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-xs shadow">
+                Jio
+              </div>
+              <div className="text-left">
+                <div className="font-extrabold text-[#0B1B2B] text-sm group-hover:text-blue-700">Reliance Jio Stores</div>
+                <div className="text-[10px] text-slate-500">Retail Glass Storefronts</div>
+              </div>
+            </Link>
+
+            <Link
+              href="/projects/peter-england-retail-front"
+              className="flex items-center gap-2 hover:opacity-100 transition group"
+            >
+              <div className="w-9 h-9 rounded-full bg-red-700 text-white font-bold flex items-center justify-center text-xs shadow">
+                PE
+              </div>
+              <div className="text-left">
+                <div className="font-extrabold text-[#0B1B2B] text-sm group-hover:text-red-700">Peter England</div>
+                <div className="text-[10px] text-slate-500">Aditya Birla Fashion Showroom</div>
+              </div>
+            </Link>
+
+            <Link
+              href="/projects/being-human-clothing-store"
+              className="flex items-center gap-2 hover:opacity-100 transition group"
+            >
+              <div className="w-9 h-9 rounded-full bg-black text-white font-bold flex items-center justify-center text-xs shadow">
+                BH
+              </div>
+              <div className="text-left">
+                <div className="font-extrabold text-[#0B1B2B] text-sm group-hover:text-slate-800">Being Human</div>
+                <div className="text-[10px] text-slate-500">Mall Retail Elevators &amp; Doors</div>
+              </div>
+            </Link>
+
+            <Link
+              href="/projects/hindware-experience-centre"
+              className="flex items-center gap-2 hover:opacity-100 transition group"
+            >
+              <div className="w-9 h-9 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center text-xs shadow">
+                HW
+              </div>
+              <div className="text-left">
+                <div className="font-extrabold text-[#0B1B2B] text-sm group-hover:text-amber-700">Hindware Experience</div>
+                <div className="text-[10px] text-slate-500">Spider Glazing &amp; ACP Cladding</div>
+              </div>
+            </Link>
+
+            <div className="flex items-center gap-2">
+              <div className="w-9 h-9 rounded-full bg-slate-800 text-white font-bold flex items-center justify-center text-xs shadow">
+                IT
+              </div>
+              <div className="text-left">
+                <div className="font-extrabold text-[#0B1B2B] text-sm">Hitec City &amp; Gachibowli</div>
+                <div className="text-[10px] text-slate-500">Corporate Executive Cabins</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. COMPANY INTRODUCTION & MASTERY (Requirement #8, #26, #27) */}
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          <div className="lg:col-span-6 space-y-6">
+            <div className="inline-flex items-center gap-2 text-[#C5A059] text-xs font-bold uppercase tracking-wider bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+              <Award className="w-3.5 h-3.5" />
+              19+ Years of Glass Engineering Mastery
+            </div>
+
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0B1B2B] tracking-tight leading-snug">
+              Specialized Architectural Glass Fabricators in Hyderabad Since 2007
+            </h2>
+
+            <p className="text-slate-700 text-sm sm:text-base leading-relaxed">
+              Started in 2007, <strong>World Art Glass</strong> is an established international-standard glass fabrication and contracting company headquartered in Goshamahal, Hyderabad. Over 19+ years, we have mastered the art and engineering of structural glass, acoustic office partitions, black slim profiles, spider facades, and luxury residential installations.
+            </p>
+
+            <p className="text-slate-700 text-sm sm:text-base leading-relaxed">
+              We eliminate the multiple tiers of intermediary glass dealers and sub-contractors. By operating our own CNC glass edge-polishing facility and digital laser measurement crews, we provide direct wholesale factory pricing, uncompromising Saint-Gobain material authenticity, and rapid turnaround on demanding corporate fitout schedules.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              <div className="flex items-start gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-[#C5A059] shrink-0 mt-1" />
+                <span className="text-xs sm:text-sm text-slate-800 font-semibold">
+                  100% Genuine Saint-Gobain Glass with permanent laser logos
+                </span>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-[#C5A059] shrink-0 mt-1" />
+                <span className="text-xs sm:text-sm text-slate-800 font-semibold">
+                  Free Laser Site Measurement anywhere in Hyderabad
+                </span>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-[#C5A059] shrink-0 mt-1" />
+                <span className="text-xs sm:text-sm text-slate-800 font-semibold">
+                  Dorma &amp; Ozone Heavy-Duty Hardware with 500k-cycle tests
+                </span>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-[#C5A059] shrink-0 mt-1" />
+                <span className="text-xs sm:text-sm text-slate-800 font-semibold">
+                  Full GST Billing (GSTIN: 36GPSPS7449Q1ZB) with ITC credit
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-4 flex flex-wrap items-center gap-4">
+              <Link
+                href="/why-us"
+                className="inline-flex items-center gap-2 bg-[#0B1B2B] hover:bg-[#17364b] text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl transition"
+              >
+                <span>Read Full Company Profile</span>
+                <ArrowRight className="w-4 h-4 text-[#D4AF37]" />
+              </Link>
+              <Link
+                href="/saint-gobain"
+                className="text-xs sm:text-sm font-bold text-[#C5A059] hover:underline"
+              >
+                Explore Saint-Gobain Glass Range &rarr;
               </Link>
             </div>
+          </div>
 
-            {/* Grid of Featured Cards: 2 cards per row on mobile (grid-cols-2), 4 on desktop (lg:grid-cols-4) */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
-              {featuredSolutions.map((service, index) => (
-                <div
-                  key={service.id}
-                  className={`bg-white rounded-2xl sm:rounded-3xl overflow-hidden border transition-all duration-300 flex flex-col group ${
-                    index === 0
-                      ? "border-sky-500 shadow-md sm:shadow-lg shadow-sky-100 ring-1 sm:ring-2 ring-sky-500/20"
-                      : "border-slate-200/90 hover:border-sky-300 hover:shadow-md"
-                  }`}
-                >
-                  {/* Image Header */}
-                  <div className="relative h-32 xs:h-36 sm:h-48 w-full bg-slate-900 overflow-hidden">
-                    <Image
-                      src={service.image}
-                      alt={service.title}
-                      fill
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
-                      className="object-cover group-hover:scale-105 transition duration-500"
-                    />
-                    <div className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-slate-900/85 backdrop-blur-md text-white text-xs sm:text-xs font-bold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full border border-white/10 shadow-sm">
-                      {service.tag}
-                    </div>
-                    <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 bg-sky-600 text-white text-xs sm:text-xs font-bold px-2 sm:px-2.5 py-0.5 rounded-md shadow-sm">
-                      {service.thickness}
-                    </div>
+          <div className="lg:col-span-6 space-y-4">
+            <div className="relative h-72 sm:h-96 rounded-2xl overflow-hidden shadow-2xl bg-slate-900 border border-slate-200">
+              <Image
+                src="/images/black_slim_partitions_hd.jpg"
+                alt="World Art Glass Master Craftsmanship"
+                fill
+                className="object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+              <div className="absolute bottom-4 left-4 right-4 bg-[#0B1B2B]/95 p-4 rounded-xl border border-[#D4AF37]/40 text-white backdrop-blur-md">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-bold text-sm text-white">In-House CNC Edge Polishing</h4>
+                    <p className="text-[11px] text-slate-300">Millimeter-precision waterjet cutouts for Dorma/Ozone fittings</p>
                   </div>
+                  <span className="text-xs font-bold text-[#D4AF37] bg-[#D4AF37]/20 px-2.5 py-1 rounded">Goshamahal Works</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                  {/* Body Content */}
-                  <div className="p-3 sm:p-5 flex flex-col flex-grow">
-                    <h3 className="text-base sm:text-lg lg:text-xl font-bold text-slate-900 mb-1.5 sm:mb-2 group-hover:text-sky-600 transition leading-snug line-clamp-2 min-h-[2.8rem] sm:min-h-0">
-                      {service.title}
+        </div>
+      </section>
+
+      {/* 4. PRODUCTS & SERVICES GRID (Requirement #9 & 15 Service Pages) */}
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-slate-100 border-t border-slate-200">
+        <div className="max-w-7xl mx-auto space-y-10">
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+              <span className="text-xs uppercase tracking-wider font-bold text-[#C5A059]">
+                Specialized Architectural Portfolio
+              </span>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0B1B2B] mt-1">
+                Explore Our Key Products &amp; Services
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 mt-2 max-w-xl">
+                Dedicated engineering for commercial corporate offices, retail stores, and luxury villas. Select a category below:
+              </p>
+            </div>
+
+            {/* Category Tabs */}
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setActiveServiceTab("commercial")}
+                className={`text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl transition cursor-pointer ${
+                  activeServiceTab === "commercial"
+                    ? "bg-[#0B1B2B] text-[#D4AF37] shadow-md border border-[#D4AF37]/50"
+                    : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200"
+                }`}
+              >
+                Commercial Partitions
+              </button>
+              <button
+                onClick={() => setActiveServiceTab("doors-facades")}
+                className={`text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl transition cursor-pointer ${
+                  activeServiceTab === "doors-facades"
+                    ? "bg-[#0B1B2B] text-[#D4AF37] shadow-md border border-[#D4AF37]/50"
+                    : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200"
+                }`}
+              >
+                Doors &amp; Facades
+              </button>
+              <button
+                onClick={() => setActiveServiceTab("residential-decorative")}
+                className={`text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl transition cursor-pointer ${
+                  activeServiceTab === "residential-decorative"
+                    ? "bg-[#0B1B2B] text-[#D4AF37] shadow-md border border-[#D4AF37]/50"
+                    : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200"
+                }`}
+              >
+                Residential &amp; Decorative
+              </button>
+            </div>
+          </div>
+
+          {/* Service Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {displayedServices.map((service) => (
+              <div
+                key={service.slug}
+                className="group bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#D4AF37]/60 transition-all duration-300 flex flex-col"
+              >
+                <div className="relative h-56 w-full overflow-hidden bg-slate-900">
+                  <Image
+                    src={service.heroImage}
+                    alt={service.title}
+                    fill
+                    className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-black/20"></div>
+
+                  <span className="absolute top-3 left-3 bg-[#0B1B2B]/90 text-[#D4AF37] border border-[#D4AF37]/40 text-[11px] font-bold px-2.5 py-1 rounded-full backdrop-blur-md shadow">
+                    {service.badge}
+                  </span>
+                </div>
+
+                <div className="p-6 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-xl font-bold text-[#0B1B2B] mb-2 group-hover:text-[#C5A059] transition">
+                      <Link href={`/services/${service.slug}`}>{service.title}</Link>
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed mb-3 sm:mb-4 flex-grow line-clamp-2 sm:line-clamp-3">
-                      {service.desc}
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4 line-clamp-3">
+                      {service.tagline}
                     </p>
 
-                    <div className="flex flex-col xs:flex-row items-stretch xs:items-center justify-between pt-2.5 sm:pt-3 border-t border-slate-100 gap-1.5 mt-auto">
-                      <Link
-                        href="/services#calculator"
-                        className="text-xs sm:text-sm font-bold text-sky-700 hover:text-sky-900 transition text-center xs:text-left py-1 xs:py-0"
-                      >
-                        Estimate Cost
-                      </Link>
-                      <a
-                        href={`https://wa.me/919985597294?text=Hi%20World%20Art%20Glass%2C%20I%20am%20interested%20in%20${encodeURIComponent(service.title)}.`}
-                        target="_blank"
-                        className="w-full xs:w-auto inline-flex items-center justify-center gap-1.5 text-xs sm:text-xs font-bold bg-[#7dd91a] hover:bg-[#71c917] text-white px-2.5 sm:px-3 py-2 rounded-full transition shadow-sm drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)]"
-                      >
-                        <WhatsAppIcon className="w-3.5 h-3.5 sm:w-3.5 sm:h-3.5" /> Inquire
-                      </a>
-                    </div>
+                    <ul className="space-y-1.5 mb-6 text-xs text-slate-700">
+                      {service.specifications.slice(0, 3).map((spec, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#C5A059] shrink-0 mt-0.5" />
+                          <span>
+                            <strong className="text-slate-800">{spec.label}:</strong> {spec.value}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                </div>
-              ))}
-            </div>
 
-          </div>
-        </div>
-      </section>
-
-      {/* Precision Craftsmanship & Engineering Section (Image Left, Text Right) */}
-      <section className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white border-t border-slate-200/80">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-center">
-            
-            {/* Left Column: Photorealistic Architectural Glass Installation Image */}
-            <div className="lg:col-span-6 order-1">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-slate-900/10 border border-slate-200/90 bg-slate-950 group">
-                <div className="relative h-[280px] sm:h-[400px] lg:h-[500px] w-full overflow-hidden">
-                  <Image
-                    src="/images/architectural_glass_craftsmanship.jpg"
-                    alt="World Art Glass Architectural Toughened Glass Fabrication and Installation"
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    quality={95}
-                    className="object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                    priority
-                  />
-                  
-                  {/* Floating Top Badge */}
-                  <div className="absolute top-3.5 left-3.5 sm:top-4 sm:left-4 z-10">
-                    <span className="inline-flex items-center gap-1.5 bg-slate-950/85 backdrop-blur-md border border-white/20 text-white text-[11px] sm:text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg">
-                      <ShieldCheck className="w-3.5 h-3.5 text-[#7dd91a]" />
-                      Genuine Saint-Gobain Toughened Glass
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Architectural Narrative & Core Advantages Text */}
-            <div className="lg:col-span-6 order-2">
-              <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-sky-700 bg-sky-100/90 border border-sky-200/80 px-3.5 py-1 rounded-full mb-3.5 sm:mb-4">
-                <Sparkles className="w-3.5 h-3.5 text-sky-600" /> Architectural Precision &amp; Engineering
-              </div>
-
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
-                Engineered With Precision. Built With Genuine Saint-Gobain Glass.
-              </h2>
-
-              <p className="text-slate-600 text-xs sm:text-base leading-relaxed mb-6">
-                From high-density IT corporate suites in HITEC City and Gachibowli to private luxury villas in Jubilee Hills, World Art Glass delivers bespoke architectural glass installations engineered for acoustic privacy, modern aesthetics, and lifelong safety.
-              </p>
-
-              {/* 4 Feature Points Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                
-                <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-4 hover:border-sky-300 transition">
-                  <div className="flex items-center gap-2 font-bold text-slate-900 text-xs sm:text-sm mb-1.5">
-                    <span className="w-6 h-6 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center shrink-0">
-                      <Ruler className="w-3.5 h-3.5" />
-                    </span>
-                    Laser Site Survey
-                  </div>
-                  <p className="text-[11px] sm:text-xs text-slate-500 leading-normal">
-                    Precision 3D laser measurement ensures seamless alignment even against uneven or out-of-plumb walls.
-                  </p>
-                </div>
-
-                <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-4 hover:border-sky-300 transition">
-                  <div className="flex items-center gap-2 font-bold text-slate-900 text-xs sm:text-sm mb-1.5">
-                    <span className="w-6 h-6 rounded-lg bg-emerald-100 text-[#5ea313] flex items-center justify-center shrink-0">
-                      <ShieldCheck className="w-3.5 h-3.5" />
-                    </span>
-                    100% Certified Glass
-                  </div>
-                  <p className="text-[11px] sm:text-xs text-slate-500 leading-normal">
-                    5x stronger than regular annealed glass, certified with permanent laser logo and GST batch records.
-                  </p>
-                </div>
-
-                <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-4 hover:border-sky-300 transition">
-                  <div className="flex items-center gap-2 font-bold text-slate-900 text-xs sm:text-sm mb-1.5">
-                    <span className="w-6 h-6 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
-                      <Building2 className="w-3.5 h-3.5" />
-                    </span>
-                    38dB Acoustic Comfort
-                  </div>
-                  <p className="text-[11px] sm:text-xs text-slate-500 leading-normal">
-                    Slim aluminium profiles with airtight EPDM perimeter gaskets to keep cabins and conference rooms quiet.
-                  </p>
-                </div>
-
-                <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-4 hover:border-sky-300 transition">
-                  <div className="flex items-center gap-2 font-bold text-slate-900 text-xs sm:text-sm mb-1.5">
-                    <span className="w-6 h-6 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
-                      <Clock className="w-3.5 h-3.5" />
-                    </span>
-                    Fast Turnaround
-                  </div>
-                  <p className="text-[11px] sm:text-xs text-slate-500 leading-normal">
-                    Fabricated at our Goshamahal facility and installed by senior glaziers within promised deadlines.
-                  </p>
-                </div>
-
-              </div>
-
-              {/* CTAs */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                <a
-                  href="https://wa.me/919985597294?text=Hi%20World%20Art%20Glass%2C%20I%20would%20like%20to%20schedule%20a%20Free%20Site%20Measurement%20and%20consultation."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 bg-[#7dd91a] hover:bg-[#71c917] text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-full shadow-lg shadow-[#7dd91a]/30 transition transform hover:-translate-y-0.5 drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)]"
-                >
-                  <WhatsAppIcon className="w-4 h-4" /> Book Free Site Measurement
-                </a>
-
-                <Link
-                  href="/services#calculator"
-                  className="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-full shadow-md transition"
-                >
-                  <Layers className="w-4 h-4 text-sky-400" /> Calculate Project Cost
-                </Link>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* Real Projects In Action (Deep Blue Architectural Container Matching Reference Image) */}
-      <section id="projects" className="py-12 sm:py-20 px-3 sm:px-6 lg:px-8 bg-slate-950 text-white">
-        <div className="max-w-7xl mx-auto">
-          
-          <div className="flex flex-wrap items-end justify-between gap-6 mb-12">
-            <div>
-              <span className="text-xs uppercase tracking-wider font-bold text-sky-400 bg-sky-950/80 border border-sky-800/80 px-3 py-1 rounded-full mb-3 inline-block">
-                Verified Executions in Hyderabad
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-                Real Projects In Action
-              </h2>
-              <p className="text-slate-400 text-sm mt-1">Inspected and installed across IT parks, showrooms, and villas in Telangana.</p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <Link
-                href="/projects"
-                className="inline-flex items-center gap-1.5 text-xs font-bold bg-sky-500 hover:bg-sky-600 text-white px-5 py-2.5 rounded-full transition shadow-md"
-              >
-                View Dedicated Projects Page
-              </Link>
-            </div>
-          </div>
-
-          {/* Cards Grid - 2 cards in one row on mobile (grid-cols-2), 4 on desktop (lg:grid-cols-4) */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
-            {liveProjects.slice(0, 4).map((project) => (
-              <div
-                key={project.id}
-                className="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl overflow-hidden hover:border-sky-500/50 transition group flex flex-col"
-              >
-                <div className="relative h-28 xs:h-36 sm:h-52 w-full bg-slate-950 overflow-hidden">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
-                    quality={95}
-                    className={`object-cover ${project.id === 3 ? "object-top" : "object-[center_35%]"} group-hover:scale-105 transition duration-500`}
-                  />
-                  <div className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-slate-950/85 backdrop-blur-md text-sky-300 text-[10px] sm:text-xs font-semibold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full border border-sky-800/50 shadow-sm">
-                    {project.category}
-                  </div>
-                </div>
-
-                <div className="p-3 sm:p-5 flex flex-col flex-grow">
-                  <h3 className="text-sm sm:text-base lg:text-lg font-bold text-white mb-0.5 sm:mb-1 group-hover:text-sky-400 transition leading-snug line-clamp-1">
-                    {project.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-400 mb-2.5 sm:mb-3 line-clamp-1 sm:line-clamp-none">{project.subtitle}</p>
-
-                  <div className="mt-auto pt-2.5 sm:pt-3 border-t border-slate-800 flex flex-col xs:flex-row items-stretch xs:items-center justify-between gap-1.5">
-                    <span className="text-xs sm:text-xs text-slate-400 flex items-center gap-1 line-clamp-1">
-                      <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-sky-400 shrink-0" /> {project.location}
-                    </span>
-                    <a
-                      href={`https://wa.me/919985597294?text=Hi%20World%20Art%20Glass%2C%20I%20am%20interested%20in%20a%20project%20like%20${encodeURIComponent(project.title)}.`}
-                      target="_blank"
-                      className="text-xs sm:text-sm font-semibold text-sky-400 hover:text-sky-300 transition text-right xs:text-left"
+                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+                    <Link
+                      href={`/services/${service.slug}`}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0B1B2B] group-hover:text-[#C5A059] transition"
                     >
-                      Inquire Similar
+                      <span>Specifications &amp; Details</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+                    </Link>
+
+                    <a
+                      href={`https://wa.me/919985597294?text=Hi%20World%20Art%20Glass%2C%20I%20would%20like%20a%20quotation%20for%20${encodeURIComponent(service.title)}.`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow transition"
+                    >
+                      <WhatsAppIcon className="w-3.5 h-3.5" />
+                      <span>Quote</span>
                     </a>
                   </div>
                 </div>
@@ -765,273 +518,506 @@ export default function WorldArtGlassPage() {
             ))}
           </div>
 
-          {/* Partner / Trust Badge Strip (Matching bottom strip in Image 1) */}
-          <div className="mt-14 pt-8 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 text-center">
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-bold text-slate-300">
-              Saint-Gobain Certified
+          <div className="text-center pt-4">
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-2 bg-[#0B1B2B] hover:bg-[#17364b] text-white font-bold text-xs sm:text-sm px-6 py-3.5 rounded-xl transition shadow-lg"
+            >
+              <span>View All 15 Dedicated Service Pages</span>
+              <ArrowRight className="w-4 h-4 text-[#D4AF37]" />
+            </Link>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 5. SAINT-GOBAIN SPOTLIGHT SECTION (Requirement #21 - #24) */}
+      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#0B1B2B] text-white border-y border-[#D4AF37]/30">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          
+          <div className="lg:col-span-7 space-y-6">
+            <div className="inline-flex items-center gap-2 bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#D4AF37] px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              Dedicated Saint-Gobain Brand Excellence
             </div>
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-bold text-slate-300">
-              Dorma Architectural
+
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
+              100% Genuine Saint-Gobain Architectural Glass in Hyderabad
+            </h2>
+
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+              We exclusively fabricate and install genuine Saint-Gobain glass products. Conforming strictly to IS 2553 (Part 1 &amp; 2) and EN 12150-1 safety codes, our glass features the indelible permanent laser-engraved logo and quality batch tracking codes on every panel.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-200">
+              <div className="bg-white/5 p-4 rounded-xl border border-white/10 space-y-1">
+                <h4 className="font-bold text-[#D4AF37] text-sm">Planilaque Evolution</h4>
+                <p className="text-slate-300">26+ baked high-gloss lacquered shades for luxury kitchens and wardrobes.</p>
+              </div>
+              <div className="bg-white/5 p-4 rounded-xl border border-white/10 space-y-1">
+                <h4 className="font-bold text-[#D4AF37] text-sm">ExtraClear Diamant</h4>
+                <p className="text-slate-300">Over 91% light transmission with zero green edge distortion for luxury retail.</p>
+              </div>
+              <div className="bg-white/5 p-4 rounded-xl border border-white/10 space-y-1">
+                <h4 className="font-bold text-[#D4AF37] text-sm">Antelio &amp; Cool-Lite</h4>
+                <p className="text-slate-300">Solar control glass filtering 70%+ infrared heat to cut commercial HVAC bills.</p>
+              </div>
+              <div className="bg-white/5 p-4 rounded-xl border border-white/10 space-y-1">
+                <h4 className="font-bold text-[#D4AF37] text-sm">Mirox 4Green Mirrors</h4>
+                <p className="text-slate-300">Copper-free ecological mirrors that resist moisture and black edge decay.</p>
+              </div>
             </div>
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-bold text-slate-300">
-              Ozone Patch Fittings
+
+            <div className="pt-2 flex flex-wrap items-center gap-3">
+              <Link
+                href="/saint-gobain"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#C5A059] text-slate-950 font-extrabold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-lg transition transform hover:-translate-y-0.5"
+              >
+                <span>Read Saint-Gobain Specifications Guide</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-bold text-slate-300">
-              Aludecor / Alstone ACP
-            </div>
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-bold text-slate-300">
-              GST Registered Bill
-            </div>
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-bold text-slate-300">
-              Free Laser Survey
+          </div>
+
+          <div className="lg:col-span-5">
+            <div className="bg-white/5 rounded-2xl p-6 border border-white/15 backdrop-blur-md space-y-4">
+              <h4 className="text-lg font-bold text-white flex items-center gap-2">
+                <Award className="w-5 h-5 text-[#D4AF37]" /> Authenticity Verification
+              </h4>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Before accepting glass from any vendor in Hyderabad, inspect the corner for the permanent laser-engraved Saint-Gobain hallmark. World Art Glass guarantees authenticity with official tax invoices.
+              </p>
+              <div className="relative h-48 rounded-xl overflow-hidden bg-slate-900 border border-white/10">
+                <Image
+                  src="/images/cat_toughened_glass.jpg"
+                  alt="Saint-Gobain Glass Verification"
+                  fill
+                  className="object-cover object-center"
+                />
+              </div>
             </div>
           </div>
 
         </div>
       </section>
 
+      {/* 6. FEATURED COMPLETED PROJECTS (Requirement #17 & #18) */}
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto space-y-10">
+          
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <span className="text-xs uppercase tracking-wider font-bold text-[#C5A059]">
+                Verified Case Studies
+              </span>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0B1B2B] mt-1">
+                Completed Architectural Projects in Hyderabad
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 mt-2">
+                Executed on schedule with 100% genuine Saint-Gobain glass &amp; official GST billing.
+              </p>
+            </div>
 
+            <Link
+              href="/projects"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#0B1B2B] hover:text-[#C5A059] transition"
+            >
+              <span>View All Project Case Studies</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
 
-      {/* Ideal For Verticals */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <span className="text-xs uppercase tracking-wider font-bold text-sky-600 bg-sky-100 px-3 py-1 rounded-full mb-3 inline-block">
-              Architectural Verticals
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {featuredProjects.map((proj) => (
+              <div
+                key={proj.slug}
+                className="group bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#D4AF37]/60 transition-all duration-300 flex flex-col"
+              >
+                <div className="relative h-60 w-full overflow-hidden bg-slate-900">
+                  <Image
+                    src={proj.heroImage}
+                    alt={proj.title}
+                    fill
+                    className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-black/20"></div>
+
+                  <span className="absolute top-3 left-3 bg-[#0B1B2B]/90 text-[#D4AF37] border border-[#D4AF37]/40 text-[11px] font-bold px-2.5 py-1 rounded-full backdrop-blur-md shadow">
+                    {proj.categoryLabel}
+                  </span>
+
+                  <span className="absolute bottom-3 left-3 text-white text-xs font-semibold flex items-center gap-1.5 backdrop-blur-md bg-black/40 px-2 py-0.5 rounded">
+                    <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" />
+                    <span>{proj.location}</span>
+                  </span>
+                </div>
+
+                <div className="p-6 flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="text-[11px] font-bold text-[#C5A059] uppercase tracking-wider mb-1">
+                      Client: {proj.client}
+                    </div>
+                    <h3 className="text-xl font-bold text-[#0B1B2B] mb-2 group-hover:text-[#C5A059] transition">
+                      <Link href={`/projects/${proj.slug}`}>{proj.title}</Link>
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4 line-clamp-2">
+                      {proj.tagline}
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+                    <Link
+                      href={`/projects/${proj.slug}`}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0B1B2B] group-hover:text-[#C5A059] transition"
+                    >
+                      <span>Case Study &amp; Specs</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+                    </Link>
+
+                    <a
+                      href={`https://wa.me/919985597294?text=Hi%20World%20Art%20Glass%2C%20I%20saw%20your%20project%20for%20${encodeURIComponent(proj.client)}%20and%20would%20like%20a%20similar%20quotation.`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow transition"
+                    >
+                      <WhatsAppIcon className="w-3.5 h-3.5" />
+                      <span>Inquire</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* 7. REAL SITE VIDEO WALKTHROUGHS (10 Site Videos) */}
+      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-slate-900 text-white">
+        <div className="max-w-7xl mx-auto space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <span className="text-xs uppercase tracking-wider font-bold text-[#D4AF37]">
+                Real On-Site Videos
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
+                Watch Our In-House Precision in Action
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-300 mt-2 max-w-xl">
+                Real Hyderabad job sites: from digital laser measurements and luxury curved office corridors to spider glazing facades and seamless handovers.
+              </p>
+            </div>
+
+            <Link
+              href="/gallery"
+              className="inline-flex items-center gap-2 bg-[#D4AF37] hover:bg-[#E5C158] text-slate-950 font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition"
+            >
+              <span>Watch All 10 Real Videos</span>
+              <Play className="w-3.5 h-3.5 fill-current" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="bg-slate-800/80 rounded-2xl overflow-hidden border border-slate-700 shadow-lg">
+              <div className="relative aspect-video bg-black">
+                <video
+                  src="/videos/luxury_office_curved_glass_showcase.mp4"
+                  controls
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-4">
+                <h4 className="font-bold text-sm text-white">Curved Rose-Gold Slim Profile Cabins</h4>
+                <p className="text-xs text-slate-400 mt-1">Hitec City, Hyderabad • 12mm Toughened Glass</p>
+              </div>
+            </div>
+
+            <div className="bg-slate-800/80 rounded-2xl overflow-hidden border border-slate-700 shadow-lg">
+              <div className="relative aspect-video bg-black">
+                <video
+                  src="/videos/gallery_black_slim_double_doors_demo.mp4"
+                  controls
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-4">
+                <h4 className="font-bold text-sm text-white">Black Slim 45mm Double Doors Demo</h4>
+                <p className="text-xs text-slate-400 mt-1">Financial District, Gachibowli • Dorma Closer</p>
+              </div>
+            </div>
+
+            <div className="bg-slate-800/80 rounded-2xl overflow-hidden border border-slate-700 shadow-lg">
+              <div className="relative aspect-video bg-black">
+                <video
+                  src="/videos/gallery_spider_glazing_site.mp4"
+                  controls
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-4">
+                <h4 className="font-bold text-sm text-white">Hindware Showroom Spider Glazing</h4>
+                <p className="text-xs text-slate-400 mt-1">Hyderabad • SS 316 Spider Fittings &amp; ACP</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. ARCHITECTURAL GLASS COST ESTIMATOR (Interactive Tool) */}
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-slate-200" id="calculator">
+        <div className="max-w-4xl mx-auto space-y-8">
+          
+          <div className="text-center max-w-2xl mx-auto">
+            <span className="text-xs uppercase tracking-wider font-bold text-[#C5A059] flex items-center justify-center gap-1.5">
+              <Calculator className="w-4 h-4" /> Instant Glass Cost Estimator
             </span>
-            <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-              Tailored For Every Commercial &amp; Residential Need
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1B2B] mt-1">
+              Estimate Your Glass Project in Hyderabad
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 mt-2">
+              Get an instant indicative budget calculation based on your room dimensions. Contact our estimators for final laser measurements.
+            </p>
+          </div>
+
+          <div className="bg-slate-50 p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Select Service</label>
+                <select
+                  value={calcService}
+                  onChange={(e) => setCalcService(e.target.value)}
+                  className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800 outline-none"
+                >
+                  <option value="office-partition">Office Glass Partitions</option>
+                  <option value="black-slim-partition">Black Slim Profile 45mm</option>
+                  <option value="shower-cubicle">10mm Shower Cubicle</option>
+                  <option value="glass-railing">Glass Balustrades &amp; Railings</option>
+                  <option value="toughened-supply">Toughened Glass Supply Only</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Width (Feet)</label>
+                <input
+                  type="number"
+                  min="1"
+                  max="100"
+                  value={calcWidth}
+                  onChange={(e) => setCalcWidth(Number(e.target.value))}
+                  className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800 outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Height (Feet)</label>
+                <input
+                  type="number"
+                  min="1"
+                  max="20"
+                  step="0.5"
+                  value={calcHeight}
+                  onChange={(e) => setCalcHeight(Number(e.target.value))}
+                  className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800 outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Glass Type Picker */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">Glass Specification</label>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {[
+                  { id: "10mm-toughened", label: "10mm Toughened" },
+                  { id: "12mm-toughened", label: "12mm Toughened (Recommended)" },
+                  { id: "10mm-fluted", label: "10mm Fluted / Reeded" },
+                  { id: "12mm-extraclear", label: "12mm ExtraClear Diamant" }
+                ].map((gt) => (
+                  <button
+                    key={gt.id}
+                    type="button"
+                    onClick={() => setCalcGlassType(gt.id)}
+                    className={`text-xs py-2 px-3 rounded-lg border font-medium transition cursor-pointer ${
+                      calcGlassType === gt.id
+                        ? "bg-[#0B1B2B] text-[#D4AF37] border-[#0B1B2B] font-bold"
+                        : "bg-white text-slate-700 border-slate-200 hover:bg-slate-100"
+                    }`}
+                  >
+                    {gt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Calculated Output Result */}
+            <div className="bg-[#0B1B2B] text-white p-6 rounded-xl border border-[#D4AF37]/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <span className="text-xs text-slate-400">Estimated Total Glass Area</span>
+                <div className="text-2xl font-bold text-white">{estimate.area} Sq.Ft</div>
+                <div className="text-xs text-slate-300 mt-0.5">Indicative Rate: approx. ₹{estimate.rate} / Sq.Ft</div>
+              </div>
+
+              <div className="text-right sm:text-right">
+                <span className="text-xs text-[#D4AF37] font-semibold uppercase tracking-wider">Estimated Project Budget</span>
+                <div className="text-2xl sm:text-3xl font-extrabold text-[#D4AF37]">
+                  ₹{estimate.total.toLocaleString("en-IN")}*
+                </div>
+                <div className="text-[10px] text-slate-400">*Excluding hardware, transport &amp; GST</div>
+              </div>
+
+              <a
+                href={`https://wa.me/919985597294?text=Hi%20World%20Art%20Glass%2C%20I%20used%20your%20cost%20estimator%20for%20${encodeURIComponent(calcService)}%20(${estimate.area}%20Sq.Ft%2C%20${encodeURIComponent(calcGlassType)}).%20Please%20verify%20and%20provide%20official%20quotation.`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs px-5 py-3 rounded-xl shadow-lg transition"
+              >
+                <WhatsAppIcon className="w-4 h-4" />
+                <span>Confirm Quote on WhatsApp</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 9. TAILORED ARCHITECTURAL AUDIENCE SOLUTIONS */}
+      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
+        <div className="max-w-7xl mx-auto space-y-10">
+          <div className="text-center max-w-2xl mx-auto">
+            <span className="text-xs uppercase tracking-wider font-bold text-[#C5A059]">
+              Target Solutions
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1B2B] mt-1">
+              Who We Serve Across Hyderabad
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            <div className="bg-white border border-slate-200 rounded-2xl p-4 text-center hover:shadow-md transition">
-              <Briefcase className="w-8 h-8 text-sky-600 mx-auto mb-2" />
-              <div className="font-bold text-xs text-slate-900">IT Companies &amp; Offices</div>
-            </div>
-            <div className="bg-white border border-slate-200 rounded-2xl p-4 text-center hover:shadow-md transition">
-              <Home className="w-8 h-8 text-sky-600 mx-auto mb-2" />
-              <div className="font-bold text-xs text-slate-900">Villas &amp; Apartments</div>
-            </div>
-            <div className="bg-white border border-slate-200 rounded-2xl p-4 text-center hover:shadow-md transition">
-              <Store className="w-8 h-8 text-sky-600 mx-auto mb-2" />
-              <div className="font-bold text-xs text-slate-900">Showrooms &amp; Retail</div>
-            </div>
-            <div className="bg-white border border-slate-200 rounded-2xl p-4 text-center hover:shadow-md transition">
-              <Hotel className="w-8 h-8 text-sky-600 mx-auto mb-2" />
-              <div className="font-bold text-xs text-slate-900">Hotels &amp; Hospitality</div>
-            </div>
-            <div className="bg-white border border-slate-200 rounded-2xl p-4 text-center hover:shadow-md transition">
-              <Compass className="w-8 h-8 text-sky-600 mx-auto mb-2" />
-              <div className="font-bold text-xs text-slate-900">Interior Designers</div>
-            </div>
-            <div className="bg-white border border-slate-200 rounded-2xl p-4 text-center hover:shadow-md transition">
-              <Hammer className="w-8 h-8 text-sky-600 mx-auto mb-2" />
-              <div className="font-bold text-xs text-slate-900">Renovation Projects</div>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {targetAudiences.map((aud, i) => {
+              const IconComp = aud.icon;
+              return (
+                <div
+                  key={i}
+                  className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition space-y-3"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-[#0B1B2B] text-[#D4AF37] flex items-center justify-center">
+                    <IconComp className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-bold text-base text-[#0B1B2B]">{aud.title}</h3>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{aud.desc}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Featured Video Walkthrough Showcase (Left: Texts | Right: Video) */}
-      <section className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 bg-white border-y border-slate-200">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+      {/* 10. TESTIMONIALS & REVIEWS (Requirement #30) */}
+      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white border-t border-slate-200">
+        <div className="max-w-7xl mx-auto space-y-10">
+          <div className="text-center max-w-2xl mx-auto">
+            <span className="text-xs uppercase tracking-wider font-bold text-[#C5A059]">
+              Verified Client Trust
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1B2B] mt-1">
+              What Hyderabad Architects &amp; Executives Say
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 mt-2">
+              Over 188+ verified reviews with 4.9 average stars on Google.
+            </p>
+          </div>
 
-            {/* Left Column on Desktop (Below Video on Mobile): Concise Brand & Craftsmanship Highlights */}
-            <div className="lg:col-span-7 order-2 lg:order-1">
-              <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-sky-700 bg-sky-100/90 border border-sky-200/80 px-3.5 py-1 rounded-full mb-3.5">
-                <Sparkles className="w-3.5 h-3.5 text-sky-600" />
-                Real Craft. Real Results.
-              </div>
-
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight mb-3">
-                Transforming Modern Workspaces Into Architectural Landmarks
-              </h2>
-
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-6 max-w-xl">
-                Watch our in-house precision in action — from digital laser measurements and luxury custom-framed glass corridors to spotless turnkey handovers across Hyderabad.
-              </p>
-
-              {/* 4 Compact Craftsmanship Highlights */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-7 max-w-xl">
-                <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 rounded-xl px-3.5 py-2.5">
-                  <Ruler className="w-4 h-4 text-sky-600 shrink-0" />
-                  <span className="text-sm font-bold text-slate-800">Free Laser Site Survey</span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {testimonials.map((test, i) => (
+              <div
+                key={i}
+                className="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between space-y-4 hover:border-[#D4AF37]/50 transition"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center gap-1 text-[#D4AF37]">
+                    {[...Array(test.rating)].map((_, idx) => (
+                      <Star key={idx} className="w-4 h-4 fill-current" />
+                    ))}
+                  </div>
+                  <p className="text-slate-700 text-xs sm:text-sm leading-relaxed italic">
+                    &ldquo;{test.review}&rdquo;
+                  </p>
                 </div>
-                <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 rounded-xl px-3.5 py-2.5">
-                  <Award className="w-4 h-4 text-amber-600 shrink-0" />
-                  <span className="text-sm font-bold text-slate-800">25+ Years Glass Mastery</span>
-                </div>
-                <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 rounded-xl px-3.5 py-2.5">
-                  <Clock className="w-4 h-4 text-[#5ea313] shrink-0" />
-                  <span className="text-sm font-bold text-slate-800">Fast Turnkey Delivery</span>
-                </div>
-                <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 rounded-xl px-3.5 py-2.5">
-                  <ShieldCheck className="w-4 h-4 text-indigo-600 shrink-0" />
-                  <span className="text-sm font-bold text-slate-800">100% Genuine Saint-Gobain</span>
-                </div>
-              </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3.5">
-                <a
-                  href="https://wa.me/919985597294?text=Hi%20World%20Art%20Glass%2C%20I%20watched%20your%20site%20walkthrough%20video%20and%20would%20like%20to%20book%20a%20Free%20Site%20Visit%20for%20my%20space."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 bg-[#7dd91a] hover:bg-[#71c917] text-white font-bold text-sm px-6 py-3 rounded-full shadow-lg shadow-[#7dd91a]/30 transition transform hover:-translate-y-0.5 drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)]"
-                >
-                  <WhatsAppIcon className="w-4 h-4" /> Book Free Site Visit
-                </a>
-
-                <Link
-                  href="/projects"
-                  className="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm px-6 py-3 rounded-full shadow-md transition"
-                >
-                  <Building2 className="w-4 h-4 text-sky-400" /> Explore All Projects
-                </Link>
-              </div>
-            </div>
-
-            {/* Right Column on Desktop (On Top on Mobile): Compact Portrait Project Showcase Video */}
-            <div className="lg:col-span-5 order-1 lg:order-2 flex justify-center">
-              <div className="relative w-full max-w-[260px] sm:max-w-[290px] h-[400px] sm:h-[450px] rounded-3xl overflow-hidden shadow-xl shadow-slate-900/15 border-4 border-slate-900/10 bg-slate-950 group">
-                <video
-                  src="/videos/luxury_office_curved_glass_showcase.mp4"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  controls
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-3 left-3 z-10 pointer-events-none">
-                  <span className="inline-flex items-center gap-1.5 bg-slate-950/80 backdrop-blur-md border border-white/20 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                    <Sparkles className="w-3.5 h-3.5 text-[#7dd91a]" />
-                    Site Walkthrough
+                <div className="pt-3 border-t border-slate-200 text-xs">
+                  <h4 className="font-bold text-[#0B1B2B]">{test.name}</h4>
+                  <p className="text-slate-500">{test.company} • {test.location}</p>
+                  <span className="text-[11px] font-semibold text-[#C5A059] mt-1 block">
+                    {test.service}
                   </span>
                 </div>
               </div>
-            </div>
-
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Google Reviews Section (4.9 Stars, 188+ Reviews) - Auto Carousel in a row */}
-      <section id="reviews" className="py-16 bg-slate-100/60 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider font-bold text-amber-700 bg-amber-100/90 border border-amber-200/80 px-3.5 py-1 rounded-full mb-3">
-              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-600 stroke-[1.5]" />
-              Client Feedback
-            </div>
-            <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-              Rated 4.9 Stars Across 188+ Real Clients
-            </h2>
-            <p className="text-slate-500 text-sm mt-1">Read reviews from verified property owners, architects, and IT managers in Hyderabad.</p>
-          </div>
+      {/* 11. INTERACTIVE ENQUIRY FORM & FILE UPLOAD (Requirement #32 & #33) */}
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-slate-100" id="enquiry">
+        <div className="max-w-4xl mx-auto">
+          <EnquiryForm
+            title="Book Free Site Survey & Get Quotation"
+            subtitle="Upload your project drawings, architectural PDF, or site photos (up to 25MB). Free laser survey across Hyderabad."
+            sourcePage="Homepage Master Form"
+          />
         </div>
+      </section>
 
-        {/* Continuous Auto-Scrolling Row of 8 Review Cards bounded by site-wide side padding */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative w-full overflow-hidden py-4 rounded-3xl">
-            {/* Subtle gradient fades on left & right within container */}
-            <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-20 bg-gradient-to-r from-slate-100/90 to-transparent z-10 pointer-events-none"></div>
-            <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-20 bg-gradient-to-l from-slate-100/90 to-transparent z-10 pointer-events-none"></div>
-
-            <div className="animate-marquee flex gap-6">
-              {[...reviewsList, ...reviewsList].map((review, i) => (
-                <div
-                  key={i}
-                  className="w-[300px] sm:w-[380px] md:w-[420px] shrink-0 bg-white rounded-3xl p-5 sm:p-7 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-amber-300 transition-all duration-300 flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="flex items-center gap-1.5 text-amber-400 mb-3.5">
-                      {[...Array(5)].map((_, starIdx) => (
-                        <Star key={starIdx} className="w-4 h-4 sm:w-5 sm:h-5 fill-amber-400 text-amber-400" />
-                      ))}
-                    </div>
-                    <p className="text-sm sm:text-base text-slate-700 italic leading-relaxed mb-5">
-                      &ldquo;{review.text}&rdquo;
-                    </p>
-                  </div>
-                  <div className="pt-3.5 border-t border-slate-100 flex items-center justify-between">
-                    <div>
-                      <div className="font-extrabold text-sm sm:text-base text-slate-900">{review.name}</div>
-                      <div className="text-xs text-slate-500 font-medium mt-0.5">{review.role}</div>
-                    </div>
-                    <span className={`text-xs font-bold px-3 py-1 rounded-full ${review.tagColor}`}>
-                      {review.tag}
-                    </span>
-                  </div>
-                </div>
-              ))}
+      {/* 12. GOOGLE MAPS EMBED SECTION */}
+      <section className="py-12 bg-white px-4 sm:px-6 lg:px-8 border-t border-slate-200">
+        <div className="max-w-7xl mx-auto space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <span className="text-xs uppercase tracking-wider font-bold text-[#C5A059]">
+                Visit Our Workshop &amp; Flagship Showroom
+              </span>
+              <h3 className="text-2xl font-extrabold text-[#0B1B2B]">
+                World Art Glass Location in Goshamahal, Hyderabad
+              </h3>
             </div>
+            <a
+              href="https://maps.google.com/?cid=8385085351898518265"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0B1B2B] hover:text-[#C5A059] transition"
+            >
+              <span>Open in Google Maps App</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
           </div>
-        </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-8">
-          <a
-            href="https://g.co/kgs/6xvK9Z"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-white border border-slate-300 px-5 py-2.5 rounded-full hover:bg-slate-50 transition shadow-sm"
-          >
-            Read All 188+ Google Reviews on Google Maps <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
-          </a>
-
-          {/* Verification & Trust Endorsement Texts */}
-          <p className="text-xs sm:text-sm text-slate-600 font-medium mt-4 max-w-2xl mx-auto leading-relaxed">
-            Verified ratings from IT corporate clients, architects, and luxury homeowners across Hyderabad &amp; Telangana.
-          </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-6 mt-3 text-[11px] sm:text-xs text-slate-500 font-semibold">
-            <span className="inline-flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#7dd91a]" /> 100% Genuine Feedback
-            </span>
-            <span className="text-slate-300 hidden sm:inline">&bull;</span>
-            <span className="inline-flex items-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5 text-sky-600" /> Certified Saint-Gobain Installations
-            </span>
-            <span className="text-slate-300 hidden sm:inline">&bull;</span>
-            <span className="inline-flex items-center gap-1.5">
-              <Building2 className="w-3.5 h-3.5 text-sky-600" /> Free Hyderabad Site Inspection
-            </span>
+          <div className="relative w-full h-[400px] rounded-2xl overflow-hidden border border-slate-300 shadow-lg bg-slate-100">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.4770659639537!2d78.46399127592476!3d17.38883658349704!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb977a08053781%3A0x745dde9284eb12f9!2sWorld%20Art%20Glass!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen={true}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="World Art Glass Hyderabad Google Maps Location"
+            />
           </div>
         </div>
       </section>
 
-      {/* Continuous Right-to-Left Scrolling Text Ticker Ribbon */}
-      <div className="relative w-full bg-slate-900 border-y border-white/10 py-3.5 sm:py-4 overflow-hidden shadow-inner select-none">
-        {/* Subtle Edge Vignette Gradients */}
-        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-l from-slate-900 via-slate-900/80 to-transparent z-10 pointer-events-none" />
+      {/* Global Quotation Modal */}
+      <EnquiryModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        defaultService={modalService}
+        sourceTitle="Homepage Quick Modal"
+      />
 
-        <div className="animate-ticker flex items-center gap-6 sm:gap-8 whitespace-nowrap">
-          {[...tickerItems, ...tickerItems].map((item, idx) => (
-            <div key={idx} className="flex items-center gap-6 sm:gap-8 shrink-0">
-              <span
-                className={`text-xs sm:text-sm font-bold tracking-wider uppercase transition-colors ${
-                  item.highlight
-                    ? "text-[#7dd91a] drop-shadow-[0_0_10px_rgba(125,217,26,0.35)]"
-                    : "text-slate-200 hover:text-white"
-                }`}
-              >
-                {item.text}
-              </span>
-              <span className="flex items-center justify-center text-sky-400 opacity-70">
-                <Sparkles className="w-3.5 h-3.5" />
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Modern Clean Reusable Footer & Floating WhatsApp */}
       <Footer />
       <FloatingWhatsApp />
-
     </div>
   );
 }

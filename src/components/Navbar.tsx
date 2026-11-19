@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, ChevronDown, Sparkles } from "lucide-react";
+import { ALL_SERVICES } from "@/data/servicesData";
 
 export function WhatsAppIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -16,16 +17,19 @@ export function WhatsAppIcon(props: React.SVGProps<SVGSVGElement>) {
 
 const navLinks = [
   { name: "Home", href: "/" },
-  { name: "Services", href: "/services" },
+  { name: "Services", href: "/services", hasDropdown: true },
   { name: "Projects", href: "/projects" },
+  { name: "Saint-Gobain", href: "/saint-gobain" },
   { name: "Gallery", href: "/gallery" },
-  { name: "About", href: "/why-us" },
+  { name: "About Us", href: "/why-us" },
   { name: "Contact", href: "/contact" }
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
 
   const isActive = (href: string) => {
     if (href === "/") {
@@ -34,16 +38,20 @@ export default function Navbar() {
     return pathname.startsWith(href);
   };
 
+  const commercialServices = ALL_SERVICES.filter((s) => s.category === "commercial");
+  const doorsFacadesServices = ALL_SERVICES.filter((s) => s.category === "doors-facades");
+  const decorativeServices = ALL_SERVICES.filter((s) => s.category === "residential-decorative");
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-[#17364b]/95 via-[#214863]/95 to-[#33617e]/90 backdrop-blur-xl border-b border-white/15 shadow-lg shadow-black/20 px-3 sm:px-6 lg:px-8">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[#0B1B2B]/95 backdrop-blur-xl border-b border-[#D4AF37]/20 shadow-xl shadow-black/25 px-3 sm:px-6 lg:px-8 transition-all">
       <div className="max-w-7xl mx-auto py-2.5 sm:py-3.5 flex items-center justify-between relative">
         
-        {/* Left: Brand Logo */}
+        {/* Left: Official Brand Logo */}
         <Link href="/" className="flex items-center group py-0.5 shrink-0">
           <div className="relative h-9 sm:h-11 w-40 sm:w-52 transition transform group-hover:scale-105">
             <Image 
               src="/images/world_art_glass_official_logo.png" 
-              alt="World Art Glass Hyderabad" 
+              alt="World Art Glass Hyderabad - Architectural Glass Solutions" 
               fill 
               className="object-contain object-left"
               priority
@@ -51,18 +59,112 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* Center: Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-6 xl:gap-8 absolute left-1/2 -translate-x-1/2">
+        {/* Center: Desktop Navigation Links */}
+        <nav className="hidden lg:flex items-center gap-5 xl:gap-7 absolute left-1/2 -translate-x-1/2">
           {navLinks.map((link) => {
             const active = isActive(link.href);
+
+            if (link.hasDropdown) {
+              return (
+                <div
+                  key={link.name}
+                  className="relative group"
+                  onMouseEnter={() => setServicesDropdownOpen(true)}
+                  onMouseLeave={() => setServicesDropdownOpen(false)}
+                >
+                  <Link
+                    href={link.href}
+                    className={`inline-flex items-center gap-1 text-sm font-semibold transition-colors py-2 ${
+                      active
+                        ? "text-[#D4AF37] drop-shadow-sm font-bold"
+                        : "text-slate-200 hover:text-white"
+                    }`}
+                  >
+                    <span>{link.name}</span>
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${servicesDropdownOpen ? "rotate-180 text-[#D4AF37]" : "text-slate-400"}`} />
+                  </Link>
+
+                  {/* Mega Menu Dropdown */}
+                  {servicesDropdownOpen && (
+                    <div className="absolute top-full -left-48 w-[720px] bg-[#0B1B2B]/98 backdrop-blur-2xl border border-[#D4AF37]/30 rounded-2xl shadow-2xl p-6 grid grid-cols-3 gap-6 animate-in fade-in slide-in-from-top-2 duration-150 z-50">
+                      {/* Column 1: Commercial */}
+                      <div>
+                        <div className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-wider mb-2.5 flex items-center gap-1">
+                          <Sparkles className="w-3 h-3" /> Commercial Partitions
+                        </div>
+                        <ul className="space-y-1.5">
+                          {commercialServices.map((service) => (
+                            <li key={service.slug}>
+                              <Link
+                                href={`/services/${service.slug}`}
+                                className="block text-xs text-slate-300 hover:text-white hover:bg-white/10 px-2 py-1.5 rounded-lg transition"
+                              >
+                                {service.title}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Column 2: Doors & Facades */}
+                      <div>
+                        <div className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-wider mb-2.5 flex items-center gap-1">
+                          <Sparkles className="w-3 h-3" /> Doors &amp; Facades
+                        </div>
+                        <ul className="space-y-1.5">
+                          {doorsFacadesServices.map((service) => (
+                            <li key={service.slug}>
+                              <Link
+                                href={`/services/${service.slug}`}
+                                className="block text-xs text-slate-300 hover:text-white hover:bg-white/10 px-2 py-1.5 rounded-lg transition"
+                              >
+                                {service.title}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Column 3: Residential & Decorative */}
+                      <div>
+                        <div className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-wider mb-2.5 flex items-center gap-1">
+                          <Sparkles className="w-3 h-3" /> Residential &amp; Decorative
+                        </div>
+                        <ul className="space-y-1.5">
+                          {decorativeServices.map((service) => (
+                            <li key={service.slug}>
+                              <Link
+                                href={`/services/${service.slug}`}
+                                className="block text-xs text-slate-300 hover:text-white hover:bg-white/10 px-2 py-1.5 rounded-lg transition"
+                              >
+                                {service.title}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="mt-4 pt-3 border-t border-white/10">
+                          <Link
+                            href="/services"
+                            className="text-xs font-bold text-[#D4AF37] hover:underline flex items-center gap-1"
+                          >
+                            View All 15 Services &rarr;
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
             return (
               <Link
                 key={link.name}
                 href={link.href}
-                className={`text-sm font-semibold transition-colors ${
+                className={`text-sm font-semibold transition-colors py-2 ${
                   active
-                    ? "text-[#7dd91a] drop-shadow-sm font-bold"
-                    : "text-white/85 hover:text-white"
+                    ? "text-[#D4AF37] drop-shadow-sm font-bold"
+                    : "text-slate-200 hover:text-white"
                 }`}
               >
                 {link.name}
@@ -71,26 +173,28 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* Right Side: Phone Number Pill & WhatsApp */}
+        {/* Right Side: Phone & WhatsApp CTA Buttons */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Outlined Phone Number Pill */}
+          {/* Outlined Phone Call Button */}
           <a
             href="tel:+919985597294"
-            className="inline-flex items-center gap-1.5 sm:gap-2 border border-white/40 hover:border-white text-white font-semibold text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full transition hover:bg-white/10 shadow-sm"
+            className="inline-flex items-center gap-1.5 sm:gap-2 border border-[#D4AF37]/50 hover:border-[#D4AF37] text-white font-semibold text-xs sm:text-sm px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-full transition hover:bg-white/10 shadow-sm"
+            title="Call Senior Fabricator"
           >
-            <Phone className="w-3.5 h-3.5 text-sky-300 shrink-0" />
+            <Phone className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" />
             <span className="hidden xs:inline tracking-wide">+91 99855 97294</span>
           </a>
 
-          {/* WhatsApp Direct Action Button */}
+          {/* WhatsApp Action Button */}
           <a
-            href="https://wa.me/919985597294?text=Hi%20World%20Art%20Glass%2C%20I%20need%20a%20quotation%20for%20glass%20partition%20and%20interior%20solutions."
+            href="https://wa.me/919985597294?text=Hi%20World%20Art%20Glass%2C%20I%20would%20like%20to%20get%20a%20quotation%20for%20architectural%20glass%20solutions."
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-1 sm:gap-1.5 bg-[#7dd91a] hover:bg-[#71c917] text-white font-bold text-xs px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full shadow-md shadow-[#7dd91a]/25 transition transform hover:-translate-y-0.5 drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)]"
+            className="inline-flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-md shadow-[#25D366]/25 transition transform hover:-translate-y-0.5"
             title="Chat on WhatsApp"
           >
-            <WhatsAppIcon className="w-3.5 h-3.5" /> <span className="hidden sm:inline">WhatsApp</span>
+            <WhatsAppIcon className="w-4 h-4 shrink-0" />
+            <span className="hidden sm:inline">WhatsApp</span>
           </a>
 
           {/* Mobile Menu Hamburger */}
@@ -99,24 +203,65 @@ export default function Navbar() {
             className="lg:hidden p-1.5 sm:p-2 text-white/90 hover:text-white focus:outline-none rounded-lg"
             aria-label="Toggle navigation"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
+            {mobileMenuOpen ? <X className="w-6 h-6 text-[#D4AF37]" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
 
       {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#17364b]/98 backdrop-blur-xl border-b border-white/15 px-4 sm:px-6 py-4 flex flex-col gap-2 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="lg:hidden bg-[#0B1B2B]/98 backdrop-blur-2xl border-b border-[#D4AF37]/20 px-4 sm:px-6 py-4 flex flex-col gap-2 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200 max-h-[85vh] overflow-y-auto">
           {navLinks.map((link) => {
             const active = isActive(link.href);
+
+            if (link.hasDropdown) {
+              return (
+                <div key={link.name} className="flex flex-col">
+                  <div className="flex items-center justify-between py-2 px-3">
+                    <Link
+                      href={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`text-sm font-semibold transition-colors ${
+                        active ? "text-[#D4AF37] font-bold" : "text-white"
+                      }`}
+                    >
+                      {link.name} (Overview)
+                    </Link>
+                    <button
+                      onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                      className="p-1 text-slate-400 hover:text-[#D4AF37]"
+                    >
+                      <ChevronDown className={`w-4 h-4 transition-transform ${mobileServicesOpen ? "rotate-180 text-[#D4AF37]" : ""}`} />
+                    </button>
+                  </div>
+
+                  {mobileServicesOpen && (
+                    <div className="pl-4 pr-2 py-2 space-y-1 bg-white/5 rounded-xl border border-white/10 mb-2">
+                      <p className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-wider px-2 pt-1">All 15 Specialized Services</p>
+                      {ALL_SERVICES.map((service) => (
+                        <Link
+                          key={service.slug}
+                          href={`/services/${service.slug}`}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="block text-xs text-slate-300 hover:text-white py-1.5 px-2 rounded-lg hover:bg-white/10"
+                        >
+                          • {service.title}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
             return (
               <Link
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`text-sm font-medium py-2.5 px-3 rounded-xl transition-colors ${
+                className={`text-sm font-medium py-2 px-3 rounded-xl transition-colors ${
                   active
-                    ? "text-[#7dd91a] font-bold bg-white/10 border-l-4 border-[#7dd91a]"
+                    ? "text-[#D4AF37] font-bold bg-white/10 border-l-4 border-[#D4AF37]"
                     : "text-white/90 hover:text-white hover:bg-white/5"
                 }`}
               >
@@ -124,18 +269,19 @@ export default function Navbar() {
               </Link>
             );
           })}
-          <div className="pt-3 border-t border-white/15 mt-1 space-y-2">
+
+          <div className="pt-3 border-t border-white/15 mt-2 space-y-2">
             <a
               href="tel:+919985597294"
-              className="w-full inline-flex items-center justify-center gap-2 border border-white/30 text-white font-bold text-xs py-2.5 rounded-xl hover:bg-white/10 transition"
+              className="w-full inline-flex items-center justify-center gap-2 border border-[#D4AF37]/50 text-white font-bold text-xs py-2.5 rounded-xl hover:bg-white/10 transition"
             >
-              <Phone className="w-4 h-4 text-sky-300" /> Call +91 99855 97294
+              <Phone className="w-4 h-4 text-[#D4AF37]" /> Call +91 99855 97294
             </a>
             <a
               href="https://wa.me/919985597294"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full inline-flex items-center justify-center gap-2 bg-[#7dd91a] text-white font-bold text-xs py-2.5 rounded-xl shadow-md"
+              className="w-full inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold text-xs py-2.5 rounded-xl shadow-md"
             >
               <WhatsAppIcon className="w-4 h-4" /> Chat on WhatsApp
             </a>

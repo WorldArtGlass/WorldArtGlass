@@ -1,22 +1,15 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { SEO_KEYWORDS, SERVICE_AREAS } from "@/lib/seo-keywords";
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-});
-
 export const metadata: Metadata = {
-  metadataBase: new URL("https://world-art-glass.grexa.site"),
+  metadataBase: new URL("https://www.worldartglass.net"),
   title: {
-    default: "World Art Glass Hyderabad | Best Toughened Saint-Gobain Glass Contractors",
+    default: "World Art Glass Hyderabad | Premium Architectural Glass Solutions",
     template: "%s | World Art Glass Hyderabad",
   },
   description:
-    "World Art Glass Hyderabad — Best Glass Company & Installation Contractors for 8mm, 10mm & 12mm Saint-Gobain Toughened Glass, IT Office & Black Slim Profile Glass Partitions, Frameless Shower Cubicles, Glass Sliding & Swing Doors, Staircase & Balcony Glass Railings, Spider Glass Facades, Structural Glazing, Lacquered/Fluted Glass & LED Mirrors across Banjara Hills, Jubilee Hills, Hitech City, Gachibowli, Madhapur, Financial District, Nanakramguda, Secunderabad & Begumpet.",
+    "World Art Glass Hyderabad — Premier Architectural Glass Solutions, Suppliers & Installation Contractors in Hyderabad since 2007. 100% Genuine Saint-Gobain 8mm, 10mm & 12mm Toughened Glass, Office Glass Partitions, Black Slim Profile 45mm Partitions, Telescopic Sliding Partitions, Frameless Glass Doors, Structural Glazing, Spider Glass Fittings, Lacquered Glass, Fluted Glass & LED Mirrors across Hitec City, Gachibowli, Banjara Hills, Jubilee Hills, Madhapur, Financial District & Secunderabad.",
   keywords: SEO_KEYWORDS,
   authors: [{ name: "World Art Glass Hyderabad" }],
   robots: {
@@ -41,14 +34,14 @@ export const metadata: Metadata = {
     shortcut: "/favicon.ico",
   },
   openGraph: {
-    title: "World Art Glass Hyderabad | Toughened Glass, Office Partitions & Shower Cubicles",
+    title: "WORLD ART GLASS – PREMIUM ARCHITECTURAL GLASS SOLUTIONS IN HYDERABAD",
     description:
-      "Strong • Stylish • Trusted. Leading Glass Company & Contractors in Hyderabad for Saint-Gobain 8mm/10mm/12mm Toughened Glass, Office Glass Partitions, Black Slim Profile & Telescopic Partitions, Shower Cubicles, Glass Railings, Structural Glazing & LED Mirrors.",
-    url: "https://world-art-glass.grexa.site/",
+      "Established 2007 • 19+ Years Mastery. Leading Glass Company & Contractors in Hyderabad for Saint-Gobain 8mm/10mm/12mm Toughened Glass, Office Glass Partitions, Black Slim Profile & Telescopic Partitions, Shower Cubicles, Glass Railings, Structural Glazing & LED Mirrors.",
+    url: "https://www.worldartglass.net/",
     siteName: "World Art Glass Hyderabad",
     images: [
       {
-        url: "/images/world_art_glass_official_logo.jpg",
+        url: "/images/world_art_glass_official_logo.png",
         width: 1024,
         height: 341,
         alt: "World Art Glass Hyderabad Official Logo",
@@ -59,10 +52,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "World Art Glass Hyderabad | Architectural & Toughened Glass Solutions",
+    title: "World Art Glass Hyderabad | Premium Architectural Glass Solutions",
     description:
-      "Best Glass Contractors & Dealers in Hyderabad for Saint-Gobain Toughened Glass, Office Partitions, Shower Cubicles, Railings, Spider Facades & Structural Glazing.",
-    images: ["/images/world_art_glass_official_logo.jpg"],
+      "Premier Architectural Glass Company in Hyderabad. Saint-Gobain Toughened Glass, Office Partitions, Black Slim Profiles, Spider Facades & Shower Cubicles.",
+    images: ["/images/world_art_glass_official_logo.png"],
   },
 };
 
@@ -71,12 +64,19 @@ const jsonLd = {
   "@type": "HomeAndConstructionBusiness",
   name: "World Art Glass Hyderabad",
   description:
-    "Premier Glass Company, Dealer, Fabricator & Installation Contractors in Hyderabad specializing in 8mm, 10mm & 12mm Saint-Gobain Toughened Glass, Office & IT Glass Partitions, Black Slim Profile & Telescopic Partitions, Shower Cubicles, Glass Doors, Glass Railings, Structural Glazing, Spider Glass Facades, Decorative/Fluted/Lacquered Glass, and Bathroom LED Mirrors.",
-  url: "https://world-art-glass.grexa.site/",
+    "Premier Architectural Glass Company, Dealer, Fabricator & Installation Contractors in Hyderabad since 2007. Specializing in 8mm, 10mm & 12mm Saint-Gobain Toughened Glass, Office Glass Partitions, Black Slim Profile 45mm Partitions, Telescopic Glass Partitions, Frameless Glass Doors, Structural Glazing, Spider Glass Fittings, Lacquered Glass, Fluted Glass, Shower Cubicles, Glass Railings, and Bathroom Smart LED Mirrors.",
+  url: "https://www.worldartglass.net/",
   telephone: "+91-9985597294",
+  priceRange: "₹₹",
+  openingHours: "Mo-Sa 09:30-20:30",
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 17.3888366,
+    longitude: 78.4639913,
+  },
   address: {
     "@type": "PostalAddress",
-    streetAddress: "New Aghapura X Road, Goshamahal",
+    streetAddress: "New Aghapura X Road, Habeeb Nagar, Goshamahal / Nampally",
     addressLocality: "Hyderabad",
     addressRegion: "Telangana",
     postalCode: "500001",
@@ -95,15 +95,21 @@ const jsonLd = {
     "@type": "OfferCatalog",
     name: "Architectural & Toughened Glass Solutions Hyderabad",
     itemListElement: [
-      "Toughened Glass in Hyderabad (8mm, 10mm, 12mm Saint-Gobain)",
-      "Office & IT Office Glass Partition Hyderabad",
-      "Black Slim Profile, Aluminium, Frameless & Telescopic Glass Partitions",
-      "Frameless & Sliding 10mm Toughened Glass Shower Cubicles & Enclosures",
-      "Toughened Glass Sliding, Swing, Main, Office & Bathroom Doors",
-      "Staircase & Balcony Glass Railing Hyderabad",
-      "Structural Glazing, Spider Glass Fitting & Spider Glass Facade",
-      "Lacquered Glass, Decorative Glass, Fluted Glass & Digital Printed Glass",
-      "Bathroom LED Mirror & Glass Urinal Partition",
+      "Toughened Glass",
+      "Office Glass Partitions",
+      "Black Slim Profile Aluminium Glass Partitions",
+      "Telescopic Glass Partitions",
+      "Frameless Glass Doors",
+      "Structural Glazing",
+      "Spider Glass Fittings",
+      "Saint-Gobain Lacquered Glass",
+      "Decorative & Fluted Glass",
+      "Digital Printing on Glass",
+      "Shower Cubicles",
+      "Glass Railings & Balustrades",
+      "Aluminium Glass Partitions",
+      "Glass Facades",
+      "LED Mirrors & Designer Mirrors",
     ].map((name) => ({
       "@type": "Offer",
       itemOffered: {
@@ -121,7 +127,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} min-h-screen bg-slate-50 text-slate-900 antialiased selection:bg-sky-500 selection:text-white`}>
+      <head>
+        {/* Google Analytics 4 Script Hook (Requirement #40) */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              // gtag('config', 'G-WORLDARTGLASS');
+            `,
+          }}
+        />
+      </head>
+      <body
+        className="min-h-screen bg-slate-50 text-slate-900 antialiased selection:bg-[#D4AF37] selection:text-slate-950 font-sans"
+      >
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
