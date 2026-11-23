@@ -7,6 +7,9 @@ import Navbar, { WhatsAppIcon } from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import EnquiryForm from "@/components/EnquiryForm";
+import ProjectGallery from "@/components/ProjectGallery";
+import Pagination from "@/components/Pagination";
+import { galleryProjects } from "@/data/galleryData";
 import {
   Sparkles,
   X,
@@ -108,17 +111,64 @@ const galleryVideos: GalleryVideo[] = [
     categoryLabel: "Shower & Villas",
     location: "Banjara Hills, Hyderabad",
     src: "/videos/gallery_frosted_black_sliding_shower.mp4"
+  },
+  {
+    id: "v-black-slim-corporate-office",
+    title: "Black Slim Profile Glass Partitions — Corporate Office",
+    category: "partitions",
+    categoryLabel: "Office Partitions",
+    location: "Hyderabad, Telangana",
+    src: "/videos/project_black-slim-office-partitions.mp4"
+  },
+  {
+    id: "v-hindware-experience-centre",
+    title: "Hindware Experience Centre — Spider Glazing Site Update",
+    category: "facades",
+    categoryLabel: "Facades & Railings",
+    location: "Jubilee Hills, Hyderabad",
+    src: "/videos/project_hindware-experience-centre-spider-glazing.mp4"
+  },
+  {
+    id: "v-government-coloured-glass",
+    title: "Government Project — Coloured Glass Facade",
+    category: "facades",
+    categoryLabel: "Facades & Railings",
+    location: "Telangana",
+    src: "/videos/project_government-coloured-glass-facade.mp4"
+  },
+  {
+    id: "v-aristo-sliding-wardrobe",
+    title: "Black Glass Sliding Wardrobe Shutters",
+    category: "interiors",
+    categoryLabel: "Interiors & Mirrors",
+    location: "Hyderabad, Telangana",
+    src: "/videos/project_aristo-sliding-wardrobes.mp4"
   }
 ];
 
+const VIDEOS_PER_PAGE = 6;
+
 export default function GalleryPage() {
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [activeFilter, setActiveFilterState] = useState("all");
+  const [videoPage, setVideoPage] = useState(1);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const filtered =
     activeFilter === "all"
       ? galleryVideos
       : galleryVideos.filter((item) => item.category === activeFilter);
+
+  const totalVideoPages = Math.max(1, Math.ceil(filtered.length / VIDEOS_PER_PAGE));
+  const visibleVideos = filtered.slice((videoPage - 1) * VIDEOS_PER_PAGE, videoPage * VIDEOS_PER_PAGE);
+
+  const setActiveFilter = (key: string) => {
+    setActiveFilterState(key);
+    setVideoPage(1);
+  };
+  const changeVideoPage = (next: number) => {
+    setVideoPage(next);
+    document.getElementById("videos")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const openLightbox = (index: number) => setLightboxIndex(index);
   const closeLightbox = () => setLightboxIndex(null);
@@ -142,7 +192,7 @@ export default function GalleryPage() {
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/hero_luxury_terrace_v2.jpg"
-            alt="World Art Glass Hyderabad Video Gallery"
+            alt="World Art Glass Hyderabad Project Gallery"
             fill
             className="object-cover object-center opacity-30 mix-blend-luminosity"
             priority
@@ -155,27 +205,45 @@ export default function GalleryPage() {
             <nav className="flex items-center gap-2 text-xs font-semibold text-[#D4AF37] mb-4 uppercase tracking-wider">
               <Link href="/" className="hover:text-white transition">Home</Link>
               <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-              <span className="text-white">Video Gallery</span>
+              <span className="text-white">Gallery</span>
             </nav>
 
             <div className="inline-flex items-center gap-2 bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#D4AF37] px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase mb-4 backdrop-blur-md">
               <Sparkles className="w-3.5 h-3.5" />
-              10 Verified Site Walkthrough Videos
+              {galleryProjects.length} Project Albums &bull; {galleryVideos.length} Site Videos
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight mb-4">
-              Architectural Glass Site Video Gallery
+              Architectural Glass Project &amp; Site Gallery
             </h1>
 
             <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
-              Watch real Hyderabad site videos of our Saint-Gobain Toughened Glass partitions, fluted telescopic sliding doors, frameless &amp; black-profile shower cubicles, spider glass facades, and verified client handovers.
+              Browse real Hyderabad site photographs and walkthrough videos of our Saint-Gobain Toughened Glass partitions, spider glass facades, frameless &amp; black-profile shower cubicles, designer glass doors, sliding wardrobes, and railings &mdash; organised project by project.
             </p>
+
+            <div className="flex flex-wrap gap-3 mt-6">
+              <a
+                href="#projects"
+                className="bg-[#D4AF37] text-[#0B1B2B] text-sm font-bold px-5 py-2.5 rounded-full hover:bg-[#e2c155] transition"
+              >
+                Project Photo Albums
+              </a>
+              <a
+                href="#videos"
+                className="border border-[#D4AF37]/60 text-[#D4AF37] text-sm font-bold px-5 py-2.5 rounded-full hover:bg-[#D4AF37]/10 transition"
+              >
+                Site Videos
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
+      {/* Project Photo Albums */}
+      <ProjectGallery />
+
       {/* Video Gallery Grid Section */}
-      <section className="py-12 sm:py-16 px-3 sm:px-6 lg:px-8">
+      <section id="videos" className="py-12 sm:py-16 px-3 sm:px-6 lg:px-8 scroll-mt-20 bg-white">
         <div className="max-w-7xl mx-auto">
           {/* Header & Filter Pills */}
           <div className="flex flex-wrap items-center justify-between gap-4 mb-10 pb-6 border-b border-slate-200">
@@ -219,7 +287,9 @@ export default function GalleryPage() {
 
           {/* Video Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {filtered.map((item, index) => (
+            {visibleVideos.map((item, i) => {
+              const index = (videoPage - 1) * VIDEOS_PER_PAGE + i;
+              return (
               <div
                 key={item.id}
                 onClick={() => openLightbox(index)}
@@ -280,8 +350,17 @@ export default function GalleryPage() {
                   </div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
+
+          <Pagination page={videoPage} totalPages={totalVideoPages} onChange={changeVideoPage} />
+          {totalVideoPages > 1 && (
+            <p className="mt-3 text-center text-xs text-slate-500">
+              Showing {(videoPage - 1) * VIDEOS_PER_PAGE + 1}&ndash;
+              {Math.min(videoPage * VIDEOS_PER_PAGE, filtered.length)} of {filtered.length} videos
+            </p>
+          )}
         </div>
       </section>
 

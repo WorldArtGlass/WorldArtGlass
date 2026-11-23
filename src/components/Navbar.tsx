@@ -44,11 +44,11 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#0B1B2B]/95 backdrop-blur-xl border-b border-[#D4AF37]/20 shadow-xl shadow-black/25 px-3 sm:px-6 lg:px-8 transition-all">
-      <div className="max-w-7xl mx-auto py-2.5 sm:py-3.5 flex items-center justify-between relative">
+      <div className="max-w-7xl mx-auto py-3.5 sm:py-3.5 flex items-center justify-between relative">
         
         {/* Left: Official Brand Logo */}
         <Link href="/" className="flex items-center group py-0.5 shrink-0">
-          <div className="relative h-9 sm:h-11 w-40 sm:w-52 transition transform group-hover:scale-105">
+          <div className="relative h-11 sm:h-11 w-44 sm:w-52 transition transform group-hover:scale-105">
             <Image 
               src="/images/world_art_glass_official_logo.png" 
               alt="World Art Glass Hyderabad - Architectural Glass Solutions" 
@@ -174,14 +174,14 @@ export default function Navbar() {
         </nav>
 
         {/* Right Side: Phone & WhatsApp CTA Buttons */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3">
           {/* Outlined Phone Call Button */}
           <a
             href="tel:+919985597294"
-            className="inline-flex items-center gap-1.5 sm:gap-2 border border-[#D4AF37]/50 hover:border-[#D4AF37] text-white font-semibold text-xs sm:text-sm px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-full transition hover:bg-white/10 shadow-sm"
+            className="inline-flex items-center justify-center gap-1.5 sm:gap-2 border border-[#D4AF37]/50 hover:border-[#D4AF37] text-white font-semibold text-xs sm:text-sm h-10 w-10 sm:h-auto sm:w-auto sm:px-3.5 sm:py-2 rounded-full transition hover:bg-white/10 shadow-sm"
             title="Call Senior Fabricator"
           >
-            <Phone className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" />
+            <Phone className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-[#D4AF37] shrink-0" />
             <span className="hidden xs:inline tracking-wide">+91 99855 97294</span>
           </a>
 
@@ -190,17 +190,17 @@ export default function Navbar() {
             href="https://wa.me/919985597294?text=Hi%20World%20Art%20Glass%2C%20I%20would%20like%20to%20get%20a%20quotation%20for%20architectural%20glass%20solutions."
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-md shadow-[#25D366]/25 transition transform hover:-translate-y-0.5"
+            className="inline-flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs sm:text-sm h-10 w-10 sm:h-auto sm:w-auto sm:px-4 sm:py-2 rounded-full shadow-md shadow-[#25D366]/25 transition transform hover:-translate-y-0.5"
             title="Chat on WhatsApp"
           >
-            <WhatsAppIcon className="w-4 h-4 shrink-0" />
+            <WhatsAppIcon className="w-5 h-5 sm:w-4 sm:h-4 shrink-0" />
             <span className="hidden sm:inline">WhatsApp</span>
           </a>
 
           {/* Mobile Menu Hamburger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-1.5 sm:p-2 text-white/90 hover:text-white focus:outline-none rounded-lg"
+            className="lg:hidden h-10 w-10 inline-flex items-center justify-center text-white/90 hover:text-white focus:outline-none rounded-lg"
             aria-label="Toggle navigation"
           >
             {mobileMenuOpen ? <X className="w-6 h-6 text-[#D4AF37]" /> : <Menu className="w-6 h-6" />}

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import AutoScrollRow from "@/components/AutoScrollRow";
 import Image from "next/image";
 import Link from "next/link";
 import Navbar, { WhatsAppIcon } from "@/components/Navbar";
@@ -143,6 +144,35 @@ export default function HomePage() {
     }
   ];
 
+  const trustedClients = [
+    { name: "Reliance Jio Stores", sub: "Retail Glass Storefronts", badge: "Jio", href: "/projects/jio-stores-retail-facade", badgeClass: "bg-blue-600", hoverClass: "group-hover:text-blue-700" },
+    { name: "Peter England", sub: "Aditya Birla Fashion Showroom", badge: "PE", href: "/projects/peter-england-retail-front", badgeClass: "bg-red-700", hoverClass: "group-hover:text-red-700" },
+    { name: "Being Human", sub: "Mall Retail Elevators & Doors", badge: "BH", href: "/projects/being-human-clothing-store", badgeClass: "bg-black", hoverClass: "group-hover:text-slate-800" },
+    { name: "Hindware Experience", sub: "Spider Glazing & ACP Cladding", badge: "HW", href: "/projects/hindware-experience-centre", badgeClass: "bg-amber-600", hoverClass: "group-hover:text-amber-700" },
+    { name: "Hitec City & Gachibowli", sub: "Corporate Executive Cabins", badge: "IT", href: null, badgeClass: "bg-slate-800", hoverClass: "" },
+  ];
+
+  const renderClient = (client: (typeof trustedClients)[number]) => {
+    const content = (
+      <>
+        <div className={`w-9 h-9 rounded-full ${client.badgeClass} text-white font-bold flex items-center justify-center text-xs shadow shrink-0`}>
+          {client.badge}
+        </div>
+        <div className="text-left whitespace-nowrap">
+          <div className={`font-extrabold text-[#0B1B2B] text-sm ${client.hoverClass}`}>{client.name}</div>
+          <div className="text-[10px] text-slate-500">{client.sub}</div>
+        </div>
+      </>
+    );
+    return client.href ? (
+      <Link href={client.href} className="flex items-center gap-2 hover:opacity-100 transition group">
+        {content}
+      </Link>
+    ) : (
+      <div className="flex items-center gap-2">{content}</div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
       <Navbar />
@@ -157,15 +187,15 @@ export default function HomePage() {
             muted
             playsInline
             poster="/images/hero_glazing_profiles.jpg"
-            className="w-full h-full object-cover opacity-25 mix-blend-luminosity"
+            className="w-full h-full object-cover object-center opacity-90"
           >
             <source src="/videos/luxury_office_curved_glass_showcase.mp4" type="video/mp4" />
           </video>
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1B2B] via-[#0B1B2B]/85 to-[#0B1B2B]/60 z-0"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1B2B]/90 via-[#0B1B2B]/60 to-[#0B1B2B]/15 z-0"></div>
 
         <div className="relative z-10 max-w-7xl mx-auto">
-          <div className="max-w-4xl">
+          <div className="max-w-3xl">
             {/* Heritage Trust Badge */}
             <div className="inline-flex items-center gap-2 bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#D4AF37] px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase mb-5 backdrop-blur-md shadow-lg">
               <Award className="w-3.5 h-3.5" />
@@ -173,12 +203,12 @@ export default function HomePage() {
             </div>
 
             {/* EXACT Headline Required by User (Requirement #7) */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.15] mb-5">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white leading-[1.2] mb-4">
               WORLD ART GLASS – PREMIUM ARCHITECTURAL GLASS SOLUTIONS IN HYDERABAD.
             </h1>
 
             {/* Sub-headline & Value Proposition (Requirement #8) */}
-            <p className="text-base sm:text-lg md:text-xl text-slate-300 leading-relaxed max-w-3xl mb-8">
+            <p className="text-sm sm:text-base md:text-lg text-slate-200 leading-relaxed max-w-2xl mb-8">
               Hyderabad’s premier glass contractor and fabricator specializing in 100% genuine Saint-Gobain Toughened Glass, Office Glass Partitions, Black Slim Profile 45mm Cabins, Spider Glazing Facades, Frameless Shower Cubicles, and Luxury Balustrades.
             </p>
 
@@ -244,68 +274,16 @@ export default function HomePage() {
             </span>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 md:gap-14 opacity-90">
-            <Link
-              href="/projects/jio-stores-retail-facade"
-              className="flex items-center gap-2 hover:opacity-100 transition group"
-            >
-              <div className="w-9 h-9 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-xs shadow">
-                Jio
-              </div>
-              <div className="text-left">
-                <div className="font-extrabold text-[#0B1B2B] text-sm group-hover:text-blue-700">Reliance Jio Stores</div>
-                <div className="text-[10px] text-slate-500">Retail Glass Storefronts</div>
-              </div>
-            </Link>
+          {/* Mobile: auto-scrolling horizontal line (swipeable) */}
+          <div className="md:hidden -mx-4 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+            <AutoScrollRow items={trustedClients.map((client) => renderClient(client))} />
+          </div>
 
-            <Link
-              href="/projects/peter-england-retail-front"
-              className="flex items-center gap-2 hover:opacity-100 transition group"
-            >
-              <div className="w-9 h-9 rounded-full bg-red-700 text-white font-bold flex items-center justify-center text-xs shadow">
-                PE
-              </div>
-              <div className="text-left">
-                <div className="font-extrabold text-[#0B1B2B] text-sm group-hover:text-red-700">Peter England</div>
-                <div className="text-[10px] text-slate-500">Aditya Birla Fashion Showroom</div>
-              </div>
-            </Link>
-
-            <Link
-              href="/projects/being-human-clothing-store"
-              className="flex items-center gap-2 hover:opacity-100 transition group"
-            >
-              <div className="w-9 h-9 rounded-full bg-black text-white font-bold flex items-center justify-center text-xs shadow">
-                BH
-              </div>
-              <div className="text-left">
-                <div className="font-extrabold text-[#0B1B2B] text-sm group-hover:text-slate-800">Being Human</div>
-                <div className="text-[10px] text-slate-500">Mall Retail Elevators &amp; Doors</div>
-              </div>
-            </Link>
-
-            <Link
-              href="/projects/hindware-experience-centre"
-              className="flex items-center gap-2 hover:opacity-100 transition group"
-            >
-              <div className="w-9 h-9 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center text-xs shadow">
-                HW
-              </div>
-              <div className="text-left">
-                <div className="font-extrabold text-[#0B1B2B] text-sm group-hover:text-amber-700">Hindware Experience</div>
-                <div className="text-[10px] text-slate-500">Spider Glazing &amp; ACP Cladding</div>
-              </div>
-            </Link>
-
-            <div className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-full bg-slate-800 text-white font-bold flex items-center justify-center text-xs shadow">
-                IT
-              </div>
-              <div className="text-left">
-                <div className="font-extrabold text-[#0B1B2B] text-sm">Hitec City &amp; Gachibowli</div>
-                <div className="text-[10px] text-slate-500">Corporate Executive Cabins</div>
-              </div>
-            </div>
+          {/* Tablet / Desktop: static centered row */}
+          <div className="hidden md:flex flex-wrap items-center justify-center gap-10 lg:gap-14 opacity-90">
+            {trustedClients.map((client) => (
+              <React.Fragment key={client.name}>{renderClient(client)}</React.Fragment>
+            ))}
           </div>
         </div>
       </section>
